@@ -24,7 +24,6 @@ passport.use(new Strategy(
   },
   function(email, password, cb) {
     db.findByEmail(email, function(err, user) {
-      console.log("At least we try to fine the user")
       if (err) { return cb(err); }
       if (!user) { return cb(null, false); }
       if (user.password != password) { return cb(null, false); }
@@ -70,9 +69,9 @@ connection.connect()
 // =========================================================
 app.post('/login', passport.authenticate('local'), 
   function(req, res) {
-    console.log("I'm hit")
+    console.log(res)
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ loggedin: true }))
+    res.send(JSON.stringify(req.user))
   }
 );
   
