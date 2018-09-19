@@ -1,7 +1,4 @@
 var mysql = require('mysql')
-var async = require('async')
-
-var PRODUCTION_DB = 'app_prod_database'
 
 exports.MODE_PRODUCTION = 'mode_production'
 
@@ -22,30 +19,37 @@ exports.connect = function(mode, done) {
   done()
 }
 
-exports.get = function() {
-  return state.pool
+var dummyData = [
+  { id: 1, username: 'michael', password: 'secret', email: 'michael@example.com' },
+  { id: 2, username: 'paulina', password: 'password', email: 'paulina@example.com' }
+]
+
+// =========================================================
+// Auth
+// =========================================================
+exports.createUser = function(data) {
+  console.log("Data", data)
 }
 
-exports.fixtures = function(data) {
-  var pool = state.pool
-  if (!pool) return done(new Error('Missing database connection.'))
-
-  var names = Object.keys(data.tables)
-  async.each(names, function(name, cb) {
-    async.each(data.tables[name], function(row, cb) {
-      var keys = Object.keys(row)
-        , values = keys.map(function(key) { return "'" + row[key] + "'" })
-
-      pool.query('INSERT INTO ' + name + ' (' + keys.join(',') + ') VALUES (' + values.join(',') + ')', cb)
-    }, cb)
-  }, done)
+exports.findById = function(id, cb) {
+  process.nextTick(function() {
+    var idx = id - 1
+    if (dummyData[idx]) {
+      cb(null, dummyData[idx])
+    } else {
+      cb(new Error('User ' + id + ' does not exist'))
+    }
+  })
 }
 
-exports.drop = function(tables, done) {
-  var pool = state.pool
-  if (!pool) return done(new Error('Missing database connection.'))
-
-  async.each(tables, function(name, cb) {
-    pool.query('DELETE * FROM ' + name, cb)
-  }, done)
+exports.findByEmail = function(email, cb) {
+  process.nextTick(function() {
+    for (var i = 0, len = dummyData.length; i < len; i++) {
+      var user = dummyData[i]
+      if (user.email === email) {
+        return cb(null, user)
+      }
+    }
+    return cb(null, null)
+  })
 }
