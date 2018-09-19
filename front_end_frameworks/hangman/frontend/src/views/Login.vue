@@ -20,6 +20,7 @@
           placeholder="Password">
         </b-form-input>
       </b-form-group>
+      <b-button to="/register" variant="link">Register</b-button>
       <b-button type="submit" variant="outline-primary" class="float-right">Login</b-button>
     </b-form>
   </div>
@@ -46,7 +47,6 @@ export default {
         sessionStorage.setItem("user", JSON.stringify(response.data));
 
         if (sessionStorage.getItem("user") != null) {
-          this.$emit("loggedIn");
           if (this.$route.params.nextUrl != null) {
             this.$router.push(this.$route.params.nextUrl);
           } 
