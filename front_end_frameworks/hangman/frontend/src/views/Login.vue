@@ -26,32 +26,42 @@
 </template>
 
 <script>
-import AuthService from '@/services/authService'
+import AuthService from "@/services/authService";
 export default {
-  data () {
+  data() {
     return {
       form: {
-        email: '',
-        password: null,
+        email: "",
+        password: null
       }
-    }
+    };
   },
   methods: {
-    async onSubmit (e) {
+    async onSubmit(e) {
       e.preventDefault();
-      alert(JSON.stringify(this.form));
+      alert(JSON.stringify(this.form))
       try {
         const response = await AuthService.login(this.form)
-        console.log("response:", response)
-      }
-      catch (error) {
+        
+        sessionStorage.setItem("user", JSON.stringify(response.data));
+
+        if (sessionStorage.getItem("user") != null) {
+          this.$emit("loggedIn");
+          if (this.$route.params.nextUrl != null) {
+            this.$router.push(this.$route.params.nextUrl);
+          } 
+          else {
+            this.$router.push("/");
+          }
+        }
+        console.log("response:", response);
+      } catch (error) {
         console.error(error);
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-
 </style>
