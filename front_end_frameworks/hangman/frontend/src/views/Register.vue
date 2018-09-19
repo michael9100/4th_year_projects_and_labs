@@ -59,7 +59,6 @@ export default {
       try {
         e.preventDefault()
         const response = await AuthService.register(this.form)
-        console.log("response:", response)
       }
       catch (error) {
         console.error(error);

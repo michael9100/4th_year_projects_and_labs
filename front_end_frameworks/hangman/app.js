@@ -69,7 +69,6 @@ connection.connect()
 // =========================================================
 app.post('/login', passport.authenticate('local'), 
   function(req, res) {
-    console.log(res)
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(req.user))
   }

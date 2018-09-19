@@ -38,7 +38,6 @@ export default {
     return {
       get isLoggedIn() {
       	if (sessionStorage.getItem('user') != null) {
-          console.log(sessionStorage.getItem('user'))
           return true
         }
         else {
