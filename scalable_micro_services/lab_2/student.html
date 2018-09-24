@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+<body>
+
+<form method="post" action="/addStudent">
+    First name:<br>
+    <input type="text" name="firstname" value="James">
+    
+    <br>
+    
+    Last name:<br>
+    <input type="text" name="lastname" value="Jones">
+    <br>
+    
+    address:<br>
+    <input type="text" name="address" >
+    <br>
+    
+    phone:<br>
+    <input type="text" name="phone" >
+    <br><br>
+
+    Mark:<br>
+    <input type="number" min="0" max="100" name="mark" >
+    <br><br>
+    
+    Mark:<br>
+    <select name="nationality" id="nationality">
+        <option value="irish">Irish</option>
+        <option value="other">Other</option>
+    </select>
+    <br><br>
+    
+
+    <input type="submit" value="Submit">
+</form>
+
+<p>If you click the "Submit" button, the form-data will be sent to a page called "action_page.php".</p>
+
+</body>
+</html>
