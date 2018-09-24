@@ -8,9 +8,7 @@
             <b-navbar-brand to="/">Hangman</b-navbar-brand>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
-            <b-button to="/register" variant="link">Register</b-button>
-            <b-button to="/login" variant="link">Login</b-button>
-            <b-button to="/logout" variant="link">Logout</b-button>
+            <b-button variant="link" v-if="isLoggedIn != false" @click="logOut">Logout</b-button>
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
@@ -33,3 +31,27 @@
   margin-bottom: 15px;
 }
 </style>
+
+<script>
+export default {
+  data() {
+    return {
+      get isLoggedIn() {
+      	if (sessionStorage.getItem('user') != null) {
+          return true
+        }
+        else {
+          return false
+        }
+      }
+    }
+  },
+  methods: {
+    logOut() {
+      sessionStorage.removeItem('user');
+      this.$router.push('/login')
+    }
+  }
+}
+</script>
+

@@ -2,7 +2,7 @@
   <div>
     <b-form @submit="register">
       <b-form-group>
-        <b-form-input id="email"
+        <b-form-input class="was-validated" id="email"
                       type="email"
                       v-model="form.email"
                       required
@@ -36,7 +36,8 @@
                       placeholder="Repeat Password">
         </b-form-input>
       </b-form-group>
-      <b-button type="submit" variant="outline-primary" class="float-right">Register</b-button>
+      <b-alert :show="showPasswordMatchError" variant="warning">Passwords must match!</b-alert>
+      <b-button :disabled="!formFilled" type="submit" variant="outline-primary" class="float-right">Register</b-button>
     </b-form>
   </div>
 </template>
@@ -51,6 +52,24 @@ export default {
         displayName: '',
         password: null,
         repeatPassword: null,
+      },
+      showPasswordMatchError: null
+    }
+  },
+  computed: {
+    formFilled() {
+      if (this.form.email != null && this.form.displayName != null && this.form.password != null) {
+        if (this.form.password == this.form.passwordRepeat) {
+          this.showPasswordMatchError = false          
+          return true
+        }
+        else {
+          this.showPasswordMatchError = true
+          return false
+        }
+      }
+      else {
+        return false
       }
     }
   },
@@ -59,7 +78,6 @@ export default {
       try {
         e.preventDefault()
         const response = await AuthService.register(this.form)
-        console.log("response:", response)
       }
       catch (error) {
         console.error(error);
