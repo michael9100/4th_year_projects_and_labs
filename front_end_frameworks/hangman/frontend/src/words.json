@@ -1,0 +1,32 @@
+{
+    "sports": [
+        "amateur",
+        "basketball",
+        "competitive",
+        "championship",
+        "dribble",
+        "football",
+        "hurling",
+        "goalkeeper"
+    ],
+    "countries": [
+        "afghanistan",
+        "iceland",
+        "france",
+        "germany",
+        "ireland",
+        "estonia",
+        "ukraine",
+        "switzerland"
+    ],
+    "education": [
+        "accompaniment",
+        "harmony",
+        "rhythm",
+        "guitar",
+        "recording",
+        "backbeat",
+        "pizzicato",
+        "symphony"
+    ]
+}
