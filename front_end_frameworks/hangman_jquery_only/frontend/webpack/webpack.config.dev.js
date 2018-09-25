@@ -53,16 +53,8 @@ module.exports = merge(common, {
       },
       {
         test: /\.(png|jpg)$/,
-        use:[
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'imgs/',
-              publicPath: 'imgs/'
-            }
-          }
-        ],
+        loader: 'file-loader',
+        include: Path.join(__dirname, 'src')
       },
     ]
   },

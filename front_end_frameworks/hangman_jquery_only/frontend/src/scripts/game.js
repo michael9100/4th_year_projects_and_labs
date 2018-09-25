@@ -31,7 +31,7 @@ function newGame() {
     // Build Game
     var html = ``
     html += `
-    <img src="/imgs/hangman-0.png" alt="" id="hangImage">
+    <img src="src/imgs/hangman-0.png" alt="" id="hangImage">
     <p id="category">Your category is: ${currentGame.category}</p>
     <div id="input-holder">
   `
@@ -79,7 +79,7 @@ function newGame() {
         if (letterFound == false) {
             numWrongLetters++
             
-            $('#hangImage').attr('src', `/imgs/hangman-${numWrongLetters}.png`)
+            $('#hangImage').attr('src', `src/imgs/hangman-${numWrongLetters}.png`)
         }
 
         if (numCorrectLetters == currentGame.word.length) {
