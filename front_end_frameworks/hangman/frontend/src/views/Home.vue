@@ -75,7 +75,6 @@ function newGame() {
   html += `
     <img src="../imgs/hangman-0.png" alt="" id="hangImage">
     <p id="category">Your category is: ${currentGame.category}</p>
-    <p id="category">Your category is: ${currentGame.word}</p>
     <div id="input-holder">
   `
 
