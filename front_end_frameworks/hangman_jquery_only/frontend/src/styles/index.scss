@@ -1,5 +1,111 @@
+@import url('./reset.scss');
+@import url('https://fonts.googleapis.com/css?family=Raleway:200,300');
+
+// Variables
 $body-color: blue;
+$main-font-size: 18px;
+$main-font-family: 'Raleway', sans-serif;
 
 body {
+  font-size: $main-font-size;
   color: $body-color;
-}  
+  font-family: $main-font-family;
+  font-weight: 300;
+}
+
+.container {
+  padding: 2em;
+}
+
+#game {
+  img {
+    display:block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 662px;
+    height: auto;
+  }
+}
+
+#category {
+  text-align: center;
+  font-size: 2em;
+  margin: 1.5em 0;
+}
+
+.button-holder {
+  margin: 0 auto;
+  max-width: 655px;
+  display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: stretch;
+	align-content: center;
+
+  .btn {
+    margin: 0.5em;
+    background-color: #0099ff;
+    color: #fff;
+    border: none;
+    height: 2.5em;
+    width: 2.5em;
+    font-family: $main-font-family;
+    font-size: $main-font-size;
+  }
+
+  .btn:disabled {
+    margin: 0.5em;
+    background-color: #8cd1ff;
+    color: #d6efff;
+    border: none;
+    height: 2.5em;
+    width: 2.5em;
+    font-family: $main-font-family;
+    font-size: $main-font-size;
+  }
+}
+
+#input-holder {
+  margin: 0 auto;
+  max-width: 614px;
+  display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: stretch;
+  align-content: center;
+
+  .inline-input {
+    text-align: center;
+    // margin: 0.5em;
+    height: 2.5em;
+    width: 2.5em;
+    font-family: $main-font-family;
+    font-size: $main-font-size;
+  }
+}
+
+.modal {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  display: none;
+  position: absolute;
+
+  div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+#looser {
+  background-color: red;
+}
+#winner {
+  background-color: white;
+}

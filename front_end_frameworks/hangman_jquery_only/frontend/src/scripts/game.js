@@ -9,9 +9,9 @@ var currentGame
 // =============================================
 // Main Game
 // =============================================
-$(document).ready(function () {
+$(document).ready(() => {
     newGame()
-    $('.restartGame').click(function () {
+    $('.restartGame').click(() => {
         $('#looser').hide()
         $('#winner').hide()
         newGame()
@@ -34,7 +34,7 @@ function newGame() {
     <img src="src/imgs/hangman-0.png" alt="" id="hangImage">
     <p id="category">Your category is: ${currentGame.category}</p>
     <div id="input-holder">
-  `
+    `
 
     for (var i = 0; i < currentGame.word.length; i++) {
         html += `
@@ -45,17 +45,17 @@ function newGame() {
     html += `
     </div>
     <div class="button-holder">
-  `
+    `
 
     for (var i = 0; i < alphabet.length; i++) {
         html += `
-      <button class="btn btn-primary m-1 alphabet" id="${alphabet[i]}">${alphabet[i]}</button>
-    `
+            <button class="btn alphabet" id="${alphabet[i]}">${alphabet[i]}</button>
+        `
     }
 
     html += `
-    </div>
-  `
+        </div>
+    `
 
     $('#game').append(html)
 
@@ -64,7 +64,8 @@ function newGame() {
     var numWrongLetters = 0
     var numCorrectLetters = 0
 
-    $("button.alphabet").click(function (btn) {
+    $("button.alphabet").click((btn) => {
+        console.log("FUCK")
         letterFound = false
         var letter = btn.target.innerText.toLowerCase()
         for (var i = 0; i < currentGame.word.length; i++) {
@@ -78,8 +79,7 @@ function newGame() {
 
         if (letterFound == false) {
             numWrongLetters++
-            
-            $('#hangImage').attr('src', `src/imgs/hangman-${numWrongLetters}.png`)
+            $('#hangImage').attr('src', `${require('../imgs/hangman-' + numWrongLetters + '.png')}`)
         }
 
         if (numCorrectLetters == currentGame.word.length) {
@@ -113,10 +113,3 @@ function generateWord() {
         "word": word
     }
 }
-
-export default {
-    name: 'home',
-    components: {
-    }
-}
-
