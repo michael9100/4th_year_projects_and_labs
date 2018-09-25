@@ -108,6 +108,7 @@ function newGame() {
             borderWidth: "0px"
         }, 'fast')
     })
+
 }
 
 

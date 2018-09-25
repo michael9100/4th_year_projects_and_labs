@@ -92,7 +92,7 @@ body {
   right: 0;
   bottom: 0;
   z-index: 99999;
-  display: none;
+  // display: none;
   position: absolute;
 
   div {
@@ -100,12 +100,62 @@ body {
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+
+    h1 {
+      font-size: 4em;
+      margin-bottom: 0.5em;
+    }
+
+    button {
+      cursor: pointer;
+      position: relative;
+      background: transparent;
+      color: #fff;
+      border-color: #fff;
+      font-size: 2em;
+      border-style: solid;
+      border-width: 3px;
+      border-radius: 30px;
+      padding: 15px 35px;
+      transition: all 0.5s;
+      
+      &:hover {
+        color: red;
+        background: #fff;
+        border-color: red;
+        transition: all 0.5s;
+      }
+    }
   }
 }
 
-#looser {
+#loser {
   background-color: red;
+  color: #fff;
+
+  button {
+    color: #fff;
+    border-color: #fff;
+    
+    &:hover {
+      color: red;
+      background: #fff;
+      border-color: #fff;
+    }
+  }
 }
 #winner {
   background-color: white;
+  color: green;
+  button {
+    color: green;
+    border-color: green;
+    
+    &:hover {
+      color: #fff;
+      background: green;
+      border-color: green;
+    }
+  }
 }
