@@ -11,9 +11,9 @@ var currentGame
 // =============================================
 $(document).ready(() => {
     newGame()
-    $('.restartGame').click(() => {
-        $('#looser').hide()
-        $('#winner').hide()
+    $('.restartBtn').click(() => {
+        resetGame()
+        $('.modal').hide()
         newGame()
     })
 });
@@ -94,7 +94,7 @@ function newGame() {
         if (numWrongLetters == 9) {
             $("button.alphabet").attr("disabled", true)
             resetGame()
-            $('#looser').show()
+            $('#loser').show()
         }
     })
 

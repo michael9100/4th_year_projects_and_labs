@@ -22,7 +22,7 @@ body {
     display:block;
     margin: 0 auto;
     width: 100%;
-    max-width: 662px;
+    max-width: 560px;
     height: auto;
   }
 }
@@ -92,7 +92,7 @@ body {
   right: 0;
   bottom: 0;
   z-index: 99999;
-  // display: none;
+  display: none;
   position: absolute;
 
   div {
