@@ -1,22 +1,31 @@
 // jQuery
 var $ = require('jquery');
 window.jQuery = $;
+require('webpack-jquery-ui');
 
 var words = require('../words.json')
 var alphabet = require('../alphabet.json')
 var previousWins = [] 
 var currentGame
+var user
 
 // =============================================
 // Init Game
 // =============================================
 $(document).ready(() => {
-    newGame()
-    $('.restartBtn').click(() => {
-        resetGame()
-        $('.modal').hide()
+    
+    // Authentication
+    if(!user) {
+        initAuth()
+    } 
+    else {
         newGame()
-    })
+        $('.restartBtn').click(() => {
+            resetGame()
+            $('.modal').hide()
+            newGame()
+        })
+    }
 });
 
 
@@ -76,6 +85,7 @@ function newGame() {
                     'box-shadow': '0px 0px 8px 0px #329c00',
                     'border': 'solid 2px #fff',
                 })
+                $(inputs[i]).effect( "bounce", "slow" );
                 letterFound = true
                 numCorrectLetters++
             }
@@ -86,6 +96,7 @@ function newGame() {
         // Increment numWrongLetters and change image
         if (letterFound == false) {
             numWrongLetters++
+            $('#' + btn.target.id).effect( "shake", "slow" );
             $('#hangImage').attr('src', `${require('../imgs/hangman-' + numWrongLetters + '.png')}`)
         }
 
@@ -150,4 +161,27 @@ function displayPriviousWins() {
     for(var i = 0; i < previousWins.length; i++) {
         $('#winWordList').prepend(`<li>${previousWins[i]}</li>`)
     }
+}
+
+
+// Authenticaton 
+function initAuth() {
+    // Build Markup
+    var html = ``
+    html += `
+        <form>
+            <label for="email">Email</label>
+            <input type="text" placeholder="example@example.com" name="email" required>
+        
+            <label for="password">Password</label>
+            <input type="password" placeholder="mySuperSecretPassword" name="password" required>
+        
+            <div class="formBtns">
+                <button type="button" id="registerBtn">Register</button>
+                <button type="button" id="loginBtn">Login</button>
+            </div>
+            </div>
+        </form>
+    `
+    $('#game').append(html)
 }

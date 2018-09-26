@@ -17,15 +17,18 @@ module.exports = merge(common, {
     inline: true
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery'",
+    }),
     new Webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
     }),
-    new Webpack.DefinePlugin({
-      '$': 'jquery',
-    }),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
-    })
+    }),
+    
   ],
   module: {
     rules: [
