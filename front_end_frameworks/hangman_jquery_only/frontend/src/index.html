@@ -7,9 +7,14 @@
 <body>
   <div id="app" class="container">
     <div id="game"></div>
+    <div id="sidebar">
+      <h2>Previous Wins <span id="numberOfWins"></span></h2>
+      <ol id="winWordList"></ol>
+    </div>
     <div id="winner" class="modal">
       <div>
         <h1>You WIN!</h1>
+        <p class="wordWas">The word was: </p>
         <button id="winBtn" class="restartBtn">
           PLAY AGAIN
         </button>
@@ -18,6 +23,7 @@
     <div id="loser" class="modal">
       <div>
         <h1>You Lose!</h1>
+        <p class="wordWas">The word was: </p>
         <button id="loseBtn" class="restartBtn">
           TRY AGAIN
         </button>

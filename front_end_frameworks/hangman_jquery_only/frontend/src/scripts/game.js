@@ -4,6 +4,7 @@ window.jQuery = $;
 
 var words = require('../words.json')
 var alphabet = require('../alphabet.json')
+var previousWins = [] 
 var currentGame
 
 // =============================================
@@ -23,6 +24,7 @@ $(document).ready(() => {
 // Create a new game
 // =============================================
 function newGame() {
+    // Previous Wins (Need to make this save and retrieve from JSON)
     // Choose a word
     currentGame = generateWord()
 
@@ -51,6 +53,8 @@ function newGame() {
         </div>
     `
     $('#game').append(html)
+
+    displayPriviousWins()
 
     // =============================================
     // Attach Event Listers
@@ -89,10 +93,17 @@ function newGame() {
         if (numCorrectLetters == currentGame.word.length) {
             $("button.alphabet").attr("disabled", true)
             resetGame()
+            $.each($('.wordWas'), (i, msg) => {
+                msg.innerText = `The word was: ${currentGame.word}`
+            })
+            previousWins.push(currentGame.word)
             $('#winner').show()
         }
         if (numWrongLetters == 9) {
             $("button.alphabet").attr("disabled", true)
+            $.each($('.wordWas'), (i, msg) => {
+                msg.innerText = `The word was: ${currentGame.word}`
+            })
             resetGame()
             $('#loser').show()
         }
@@ -102,11 +113,11 @@ function newGame() {
     $("button.alphabet").hover((btn) => {
         $('#' + btn.target.id).animate({
             borderWidth: "5px"
-        }, 'fast')
+        }, 100)
     }, (btn) => {
         $('#' + btn.target.id).animate({
             borderWidth: "0px"
-        }, 'fast')
+        }, 100)
     })
 
 }
@@ -129,5 +140,14 @@ function generateWord() {
     return {
         "category": category.name,
         "word": word
+    }
+}
+
+function displayPriviousWins() {
+    console.log(previousWins.length)
+    $('#numberOfWins')[0].innerHTML = previousWins.length
+    $('#winWordList').empty()
+    for(var i = 0; i < previousWins.length; i++) {
+        $('#winWordList').prepend(`<li>${previousWins[i]}</li>`)
     }
 }
