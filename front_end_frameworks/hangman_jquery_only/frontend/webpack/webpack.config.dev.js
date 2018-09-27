@@ -17,10 +17,10 @@ module.exports = merge(common, {
     inline: true
   },
   plugins: [
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      "window.jQuery": "jquery'",
+    new Webpack.ProvidePlugin({
+      $: "jQuery",
+      jQuery: "jQuery",
+      "window.jQuery": "jQuery'",
     }),
     new Webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')

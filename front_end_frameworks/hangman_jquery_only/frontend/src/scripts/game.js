@@ -1,10 +1,11 @@
 // jQuery
 var $ = require('jquery');
-window.jQuery = $;
+window.jquery = $;
 require('webpack-jquery-ui');
 
 var words = require('../words.json')
 var alphabet = require('../alphabet.json')
+var users = require('../users.json')
 var previousWins = [] 
 var currentGame
 var user
@@ -12,8 +13,7 @@ var user
 // =============================================
 // Init Game
 // =============================================
-$(document).ready(() => {
-    
+$(document).ready(() => { 
     // Authentication
     if(!user) {
         initAuth()
@@ -171,10 +171,10 @@ function initAuth() {
     html += `
         <form>
             <label for="email">Email</label>
-            <input type="text" placeholder="example@example.com" name="email" required>
+            <input id="email" type="text" placeholder="example@example.com" name="email" required>
         
             <label for="password">Password</label>
-            <input type="password" placeholder="mySuperSecretPassword" name="password" required>
+            <input id="password" type="password" placeholder="mySuperSecretPassword" name="password" required>
         
             <div class="formBtns">
                 <button type="button" id="registerBtn">Register</button>
@@ -184,4 +184,46 @@ function initAuth() {
         </form>
     `
     $('#game').append(html)
+
+    // Register
+    $('#registerBtn').click((btn) =>  {
+        var email = $('#email').val()
+        var password = $('#password').val()
+        for (var i = 0; i < users.length; i++) {
+            console.log(users[i])
+            if (users[i].email.toLowerCase() == email.toLowerCase()) {
+                alert(`${email} is already in user. Did you mean to login?`)
+                return
+            }
+            else {
+                user = {
+                    "email": email,
+                    "password": password
+                }
+            }
+        }
+        users.push(user)
+        console.log(users)
+    })
+
+    // login
+    $('#loginBtn').click((btn) =>  {
+        var email = $('#email').val()
+        var password = $('#password').val()    
+        for (var i = 0; i < users.length; i++) {
+            if (users[i].email.toLowerCase() == email.toLowerCase()) {
+                if (users[i].password == password) {
+                    user = users[i]
+                    console.log("user found", user)
+                    break
+                }
+                else {
+                    alert("Wrong Password")
+                }
+            }
+            else {
+                alert("No such user, did you mean register?")
+            }
+        }
+    })
 }
