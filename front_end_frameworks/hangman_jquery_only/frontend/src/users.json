@@ -1,6 +1,7 @@
 [
     {
         "email": "t@t.com",
-        "password": "secret"
+        "password": "secret",
+        "gamesWon": []
     }
 ]

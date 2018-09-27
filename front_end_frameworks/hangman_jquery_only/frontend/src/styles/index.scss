@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-  padding: 2em;
+  padding:0 2em 2em;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -23,6 +23,13 @@ body {
   align-content: center;
   max-width: 960px;
   margin: 0 auto;
+
+  nav {
+    display: block;
+    width: 100%;
+    padding: 1em;
+    margin-bottom: 14px;
+  }
 }
 
 #sidebar {
@@ -54,7 +61,7 @@ body {
 #category {
   text-align: center;
   font-size: 2em;
-  margin: 1.5em 0;
+  margin: 0.5em 0;
 }
 
 .button-holder {
@@ -110,7 +117,7 @@ body {
   }
 }
 
-form {
+form, nav {
   button {
     cursor: pointer;
     position: relative;

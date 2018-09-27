@@ -20,12 +20,13 @@ $(document).ready(() => {
     } 
     else {
         newGame()
-        $('.restartBtn').click(() => {
-            resetGame()
-            $('.modal').hide()
-            newGame()
-        })
     }
+    $('.restartBtn').click(() => {
+        console.log("testing")
+        resetGame()
+        $('.modal').hide()
+        newGame()
+    })
 });
 
 
@@ -33,6 +34,22 @@ $(document).ready(() => {
 // Create a new game
 // =============================================
 function newGame() {
+    $('#app').prepend(`
+        <nav id="nav"><button class="btn" id="logout">Logout</button></nav>
+    `)
+
+    $('#logout').click(() => {
+        user = null;
+        resetGame()
+        initAuth()
+    })
+
+    $('#sidebar').prepend(`
+        <h2>Previous Wins <span id="numberOfWins"></span></h2>
+        <ol id="winWordList"></ol>
+    `)
+
+    $('#game').empty()
     // Previous Wins (Need to make this save and retrieve from JSON)
     // Choose a word
     currentGame = generateWord()
@@ -138,7 +155,9 @@ function newGame() {
 // Helper Functions
 // =============================================
 function resetGame() {
+    $('#nav').remove()
     $('#game').empty()
+    $('#sidebar').empty()
 }
 
 function randomInt(max) {
@@ -155,7 +174,6 @@ function generateWord() {
 }
 
 function displayPriviousWins() {
-    console.log(previousWins.length)
     $('#numberOfWins')[0].innerHTML = previousWins.length
     $('#winWordList').empty()
     for(var i = 0; i < previousWins.length; i++) {
@@ -198,32 +216,38 @@ function initAuth() {
             else {
                 user = {
                     "email": email,
-                    "password": password
+                    "password": password,
+                    "gamesWon": []
                 }
             }
         }
         users.push(user)
-        console.log(users)
+        login(user.email, user.password)
     })
 
     // login
     $('#loginBtn').click((btn) =>  {
         var email = $('#email').val()
         var password = $('#password').val()    
+        login(email, password)
+    })
+
+    function login(email, password) {
+        console.log(email, password)
+        console.log(users)
         for (var i = 0; i < users.length; i++) {
             if (users[i].email.toLowerCase() == email.toLowerCase()) {
                 if (users[i].password == password) {
                     user = users[i]
-                    console.log("user found", user)
+                    console.log("logged in")
+                    previousWins = user.gamesWon
+                    newGame()
                     break
                 }
                 else {
                     alert("Wrong Password")
                 }
             }
-            else {
-                alert("No such user, did you mean register?")
-            }
         }
-    })
+    }
 }
