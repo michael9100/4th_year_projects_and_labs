@@ -298,18 +298,21 @@
             });
             $('#newProductForm').on( "submit",function(event) {
 
+                console.log("Testing")
+
                 event.preventDefault();
                 $("#newProduct").hide();
                 var fd = $('#newProductForm').serialize();
-
-                $.post(
-                        "/newProduct",
-                        fd,
-                        function (data) {
-                            console.log(data);
-                            $('#logonmessage').html(data);
-                        }
-                );
+                $.ajax({
+                    type: "POST",
+                    url: "/newProduct",
+                    data: {
+                        "test": "test"
+                    },
+                    success: function () {
+                        alert("Thanks!");
+                    }
+                });
 
 
             });
@@ -393,6 +396,18 @@
                 <input type="text" name="name" value="">
                 <br>
 
+                Quantity:<br>
+                <input type="number" name="quantity" value="">
+                <br>
+
+                Price:<br>
+                <input type="number" name="price" value="">
+                <br>
+                
+                Image Path:<br>
+                <input type="text" name="image" value="">
+                <br>
+                
                 <input type="submit">
             </form>
         </div>

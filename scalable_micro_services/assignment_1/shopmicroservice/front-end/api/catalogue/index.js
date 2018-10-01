@@ -22,6 +22,11 @@
      , res, next);
   });
 
+  app.post("/newProduct", function (req, res, next) {
+    console.log("Body =======", req)
+    res.send('hello world')
+  });
+  
   app.get("/tags", function(req, res, next) {
     helpers.simpleHttpRequest(endpoints.tagsUrl, res, next);
   });
