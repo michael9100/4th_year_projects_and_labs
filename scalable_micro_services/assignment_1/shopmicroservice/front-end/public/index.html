@@ -296,26 +296,37 @@
                 });
 
             });
-            $('#newProductForm').on( "submit",function(event) {
+            // $('#newProductForm').on( "submit",function(event) {
+            //     event.preventDefault();
+            //     $("#newProduct").hide();
+            //     var fd = $('#newProductForm').serialize();
+            //     $.ajax({
+            //         dataType:'application/json',
+            //         type: "POST",
+            //         url: "/newProduct",
+            //         data: {
+            //             "test": "test"
+            //         },
+            //         success: function (data) {
+            //             console.log(data)
+            //             alert("Thanks!");
+            //         }
+            //     });
+            // });
 
-                console.log("Testing")
-
+            $('#newProductForm').on("submit", function(event) {
                 event.preventDefault();
                 $("#newProduct").hide();
                 var fd = $('#newProductForm').serialize();
-                $.ajax({
-                    type: "POST",
-                    url: "/newProduct",
-                    data: {
-                        "test": "test"
-                    },
-                    success: function () {
-                        alert("Thanks!");
-                    }
+
+                console.log("FD", fd)
+       
+                $.post("/newProduct", fd, function (data) {
+                    console.log(data);
+                    $('#logonmessage').html(data);
                 });
-
-
             });
+
             getProducts();
             $("#login").hide();
             $('#register').hide();

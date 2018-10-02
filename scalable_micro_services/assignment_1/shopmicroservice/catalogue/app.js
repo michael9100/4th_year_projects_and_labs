@@ -25,28 +25,24 @@ var server = http.createServer(function (request, response) {
     console.log(request.method)
     if (request.method == 'POST') {
         console.log('Entering here POST');
-
         switch (path) {
             // ==============================================
             // New Product
             // ==============================================
             case "/newProduct":
-                var body = '';
-                console.log("Im hit! add ");
                 request.on('data', function (data) {
-                    console.log("Passed Data:", data)
                     body += data;
                 });
-
+                
                 request.on('end', function () {
                     var product = qs.parse(body);
-
-                    console.log('new Product');
-                    console.log(JSON.stringify(product, null, 2));
-
+                    console.log("body ====", product)
                 });
 
-            break;
+                response.end()
+
+                break;
+
         } //switch
     }
     else {

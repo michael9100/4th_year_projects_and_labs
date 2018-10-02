@@ -83,7 +83,7 @@
       helpers.respondSuccessBody(res, body);
     }.bind({res: res}));
   }
-
+  
   /* TODO: Add documentation */
   helpers.getCustomerId = function(req, env) {
     // Check if logged in. Get customer Id

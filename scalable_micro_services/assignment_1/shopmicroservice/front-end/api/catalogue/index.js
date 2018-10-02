@@ -3,9 +3,13 @@
 
   var express   = require("express")
     , request   = require("request")
+    , qs        = require("querystring")
     , endpoints = require("../endpoints")
     , helpers   = require("../../helpers")
+    , bodyParser   = require("body-parser")
     , app       = express()
+
+  app.use(bodyParser.json());
 
   app.get("/catalogue/images*", function (req, res, next) {
     var url = endpoints.catalogueUrl + req.url.toString();
@@ -23,8 +27,32 @@
   });
 
   app.post("/newProduct", function (req, res, next) {
-    console.log("Body =======", req)
-    res.send('hello world')
+    var url = endpoints.catalogueUrl + req.url.toString();
+
+    var body = '';
+    console.log("add ");
+    req.on('data', function (data) {
+      body += data;
+    });
+
+    req.on('end', function () {
+      var product = qs.parse(body);
+      let options = {  
+        url: url,
+        form: {
+          email: "heloo",
+          password: "helloooooooo"
+        }
+      };
+      
+      // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      // For some reason this adds undefined before the json object????????????
+      // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      request.post(options);  
+
+      res.end();
+    });
+
   });
   
   app.get("/tags", function(req, res, next) {
