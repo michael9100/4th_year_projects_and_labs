@@ -39,16 +39,13 @@
       var product = qs.parse(body);
       let options = {  
         url: url,
-        form: {
-          email: "heloo",
-          password: "helloooooooo"
-        }
+        form: product
       };
       
       // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
       // For some reason this adds undefined before the json object????????????
       // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      request.post(options);  
+      request.post(options);
 
       res.end();
     });
