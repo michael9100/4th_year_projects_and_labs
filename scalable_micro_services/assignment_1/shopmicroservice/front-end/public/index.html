@@ -248,7 +248,6 @@
                     }
                 });
                 var fd = JSON.stringify(o);
-                console.log(fd);
                 $.ajax
                     ({
                         type: "POST",
@@ -281,7 +280,6 @@
                     }
                 });
                 var fd = JSON.stringify(o);
-                console.log(fd);
                 $.ajax
                     ({
                         type: "POST",
@@ -301,7 +299,6 @@
                 $("#newProduct").hide();
                 var fd = $('#newProductForm').serialize();
                 $.post("/newProduct", fd, function (data) {
-                    console.log(data);
                     getProducts();
                 });
             });
