@@ -42,10 +42,9 @@
         form: product
       };
       
-      // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      // For some reason this adds undefined before the json object????????????
-      // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      request.post(options);
+      request.post(options, function(error, response, body) {
+        console.log("data", response)
+      });
 
       res.end();
     });

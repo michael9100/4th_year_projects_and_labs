@@ -32,13 +32,31 @@ var server = http.createServer(function(request, response) {
           body += data;
         });
 
+        var product;
+
         request.on("end", function() {
-          var product = qs.parse(body);
+          product = qs.parse(body);
           console.log("body ====", product);
+          
+          // var query = "SELECT * FROM products ";
+          
+          var query = `INSERT INTO products (name, quantity, price, image) 
+          VALUES ('${product.name}', '${product.quantity}', '${product.price}', '${product.image}')`;
+          
+          db.query(query, [], function(err, rows) {
+            if (err) throw err;
+          });
+          
+          query = "SELECT * FROM products ";
+          
+          db.query(query, [], function(err, rows) {
+            if (err) throw err;
+            console.log(JSON.stringify(rows, null, 2));
+            response.end(JSON.stringify(rows));
+            console.log("Products sent");
+          });
+          
         });
-
-        response.end();
-
         break;
     } //switch
   } else {

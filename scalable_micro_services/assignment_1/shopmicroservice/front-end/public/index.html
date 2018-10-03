@@ -90,8 +90,6 @@
                     displayProducts(data, "products");
                 }
             });
-
-
         }
         function hideAll(){
             $("#login").hide();
@@ -318,12 +316,9 @@
                 event.preventDefault();
                 $("#newProduct").hide();
                 var fd = $('#newProductForm').serialize();
-
-                console.log("FD", fd)
-       
                 $.post("/newProduct", fd, function (data) {
                     console.log(data);
-                    $('#logonmessage').html(data);
+                    getProducts();
                 });
             });
 
