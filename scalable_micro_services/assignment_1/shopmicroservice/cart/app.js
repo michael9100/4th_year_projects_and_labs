@@ -24,6 +24,7 @@ app.post("/add", function (req, res, next) {
     //       console.log('addToCart id '+id)
     var max = 0;
     var ind = 0;
+    console.log("customerID:", obj.custId)
     if (cart["" + obj.custId] === undefined)
         cart["" + obj.custId] = [];
     var c = cart["" + obj.custId];
@@ -40,7 +41,25 @@ app.post("/add", function (req, res, next) {
         "quantity": obj.quantity
     };
     console.log(JSON.stringify(data));
-    c.push(data);
+    
+    var item;
+    var itemFound = false;
+    for (let i = 0; i < c.length; i++) {
+        item = c[i];
+
+        if (item.productID == data.productID) {
+            item.quantity = parseInt(item.quantity) + parseInt(data.quantity)
+            itemFound = true;
+            break;
+        }
+    }
+    
+    if(!itemFound) {
+        c.push(data);
+    }
+
+    console.log("item", item)
+    
 
     res.status(201);
 
@@ -67,9 +86,12 @@ app.delete("/cart/:custId/items/:id", function (req, res, next) {
 
 
 app.get("/cart/:custId/items", function (req, res, next) {
-
-
     var custId = req.params.custId;
+
+    console.log("======================================================================================")
+    console.log("mycart", cart["" + custId])
+    console.log("======================================================================================")
+
     console.log("getCart" + custId);
 
 

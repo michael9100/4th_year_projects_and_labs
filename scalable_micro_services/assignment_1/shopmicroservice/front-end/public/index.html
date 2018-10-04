@@ -71,6 +71,7 @@
             hideAll();
             $("#products").hide();
             $("#cart").show();
+            console.log("show cart hit")
             $.ajax({
                 dataType: "json",
                 url: "/cart",
