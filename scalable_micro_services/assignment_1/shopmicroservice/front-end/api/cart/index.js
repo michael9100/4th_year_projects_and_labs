@@ -68,13 +68,15 @@
       helpers.respondStatus(res, response.statusCode);
     });
   });
-
+  
   // Delete item from cart
   app.delete("/cart/:id", function(req, res, next) {
+    console.log("I'm hit - CART DELETE")
     if (req.params.id == null) {
       return next(new Error("Must pass id of item to delete"), 400);
     }
 
+    console.log("id", req.params.id )
     console.log("Delete item from cart: " + req.url);
 
     var custId = helpers.getCustomerId(req, app.get("env"));

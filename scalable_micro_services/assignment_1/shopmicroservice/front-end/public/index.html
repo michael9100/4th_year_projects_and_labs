@@ -151,14 +151,25 @@
 
         }
 
-        function deleteCartItem(count) {
-            $.post(
-                "/delete",
-                { cnt: count },
-                function (data) {
+        function deleteCartItem(id) {
+            // $.delete(
+            //     "/cart",
+            //     { 
+            //         cnt: count 
+            //     },
+            //     function (data) {
 
+            //     }
+            // );
+            console.log("id", id)
+            $.ajax({
+                type: "delete",
+                url: "/cart/" + id,
+                contentType: 'application/json',
+                success: function (data) {
+                    alert("Thanks!", data);
                 }
-            );
+            });
 
         }
 
