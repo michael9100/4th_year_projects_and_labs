@@ -54,6 +54,13 @@
         tr:nth-child(even) {
             background-color: #dddddd;
         }
+
+        #totalPrice {
+            float: right;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+            color: #4fab00;
+        }
     </style>
 
 
@@ -76,6 +83,7 @@
                 dataType: "json",
                 url: "/cart",
                 success: function (data) {
+                    console.log("Cart", data)
                     displayCart(data, "cart");
                 }
             });
@@ -228,7 +236,8 @@
             }
             out += "</table>";
             out += "<br>";
-            out += "Total: " + total + '<br>';
+            // out += "Total: " + total + '<br>';
+            out += '<span id="totalPrice">Total: ' + total + '</span>';
             out += '<button onclick="checkout()">Checkout</button><br>';
             out += '<div id="cartmessage"></div>';
             document.getElementById(name).innerHTML = out;

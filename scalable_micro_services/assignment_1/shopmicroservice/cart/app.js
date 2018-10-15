@@ -74,9 +74,24 @@ app.delete("/cart/:custId/items/:id", function (req, res, next) {
     console.log("Delete item from cart: for custId " + req.url + ' ' +
         req.params.id.toString());
     console.log("delete ");
+    // console.log("id", req.params.id )
+    // console.log("custid", req.params.custId )
+    var custId = req.params.custId;
+    var itemId = req.params.id;
 
+    var c = cart["" + req.params.custId]
+    
+    console.log("Cart for me, =================", c);
+    console.log("Cart Size", c.length)
 
+    for (i = 0; i < c.length; i++) {
+        if (c[i].cartid == itemId) {
+            console.log("Item found ",c[i])
+            c.splice(i, 1)
+        }
+    }
 
+    console.log("New Cart, =================", c);
 
 
     res.send(' ');

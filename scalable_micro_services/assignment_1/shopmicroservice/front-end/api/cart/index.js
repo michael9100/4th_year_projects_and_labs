@@ -81,10 +81,16 @@
 
     var custId = helpers.getCustomerId(req, app.get("env"));
 
+    console.log(endpoints.cartsUrl +
+      "/cart/" +
+      custId +
+      "/items/" +
+      req.params.id.toString())
+
     var options = {
       uri:
         endpoints.cartsUrl +
-        "/" +
+        "/cart/" +
         custId +
         "/items/" +
         req.params.id.toString(),
