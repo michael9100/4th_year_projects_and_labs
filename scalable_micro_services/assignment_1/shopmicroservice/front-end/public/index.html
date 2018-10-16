@@ -160,22 +160,12 @@
         }
 
         function deleteCartItem(id) {
-            // $.delete(
-            //     "/cart",
-            //     { 
-            //         cnt: count 
-            //     },
-            //     function (data) {
-
-            //     }
-            // );
-            console.log("id", id)
             $.ajax({
                 type: "delete",
                 url: "/cart/" + id,
                 contentType: 'application/json',
                 success: function (data) {
-                    alert("Thanks!", data);
+                    $("#item_" + id).remove()
                 }
             });
 
@@ -221,7 +211,7 @@
             out += "</tr>";
             var total = 0;
             for (i = 0; i < cart.length; i++) {
-                out += "<tr>";
+                out += "<tr id='item_" + cart[i].cartid + "' >";
                 out += '<td>' + cart[i].name + '</td>';
                 out += '<td>' + cart[i].price + '</td>';
                 out += '<td> <img src="';
