@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Getting Started with ml5.js</title>
+
+      <!-- Styling -->
+      <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+      <link rel="stylesheet" href="http://cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+      <link rel="stylesheet" href="http://cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+
+      <script src="https://unpkg.com/ml5@0.1.1/dist/ml5.min.js"></script>
+    </head>
+
+  <body>
+
+    <div class="container">
+      <div class="row">
+        <div class="column">
+          <h1>Sentiment Analysis</h1>
+          <label for="textInput">Your Text Here</label>
+          <textarea placeholder="Enter some text here to be analysied." id="textInput"></textarea>  
+          <p>
+            The above text has a sentiment value of: <span id="sentimentVal"></span>
+          </p>  
+        </div>
+      </div>
+    </div>
+
+    <script src="./sentiment.js"></script>
+  </body>
+</html>
