@@ -1,0 +1,20 @@
+//Specify proto3 version.
+syntax = "proto3"; 
+ 
+//unique package name.
+package auth; 
+ 
+service Auth { 
+  //Service class to be used by the clients
+  rpc join(stream ListItem) returns (stream ListItem){}
+  rpc add(ListItem) returns (ListItem){}
+}
+
+message ListItem {
+  // The item name e.g. Buy Alcohol.
+  string name = 1;
+  // ID of the item author.
+  int32 authorId = 2;
+  // Is this completed, 0 = no, 1 = yes.
+  bool complete = 3;
+}
