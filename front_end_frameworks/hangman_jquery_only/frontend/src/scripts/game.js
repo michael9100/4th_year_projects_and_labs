@@ -22,7 +22,6 @@ $(document).ready(() => {
         newGame()
     }
     $('.restartBtn').click(() => {
-        console.log("testing")
         resetGame()
         $('.modal').hide()
         newGame()
@@ -208,7 +207,6 @@ function initAuth() {
         var email = $('#email').val()
         var password = $('#password').val()
         for (var i = 0; i < users.length; i++) {
-            console.log(users[i])
             if (users[i].email.toLowerCase() == email.toLowerCase()) {
                 alert(`${email} is already in user. Did you mean to login?`)
                 return
@@ -233,8 +231,6 @@ function initAuth() {
     })
 
     function login(email, password) {
-        console.log(email, password)
-        console.log(users)
         for (var i = 0; i < users.length; i++) {
             if (users[i].email.toLowerCase() == email.toLowerCase()) {
                 if (users[i].password == password) {

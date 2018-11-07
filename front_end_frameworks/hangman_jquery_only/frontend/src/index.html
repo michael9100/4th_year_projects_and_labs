@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hangman</title>
-</head>
-<body>
-  <h1>MAKE FLASHIER</h1>
-  <div id="app" class="container">
-    <div id="game"></div>
-    <div id="sidebar"></div>
-    <div id="winner" class="modal">
-      <div>
-        <h1>You WIN!</h1>
-        <p class="wordWas">The word was: </p>
-        <button id="winBtn" class="restartBtn">
-          PLAY AGAIN
-        </button>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman</title>
+  </head>
+  <body>
+    <div id="app" class="container">
+      <!-- Game -->
+      <div id="game"></div>
+      
+      <!-- Sidebar -->
+      <div id="sidebar"></div>
+
+      <!-- Modals -->
+      <div id="winner" class="modal">
+        <div>
+          <h1>You WIN!</h1>
+          <p class="wordWas">The word was: </p>
+          <button id="winBtn" class="restartBtn">
+            PLAY AGAIN
+          </button>
+        </div>
+      </div>
+      <div id="loser" class="modal">
+        <div>
+          <h1>You Lose!</h1>
+          <p class="wordWas">The word was: </p>
+          <button id="loseBtn" class="restartBtn">
+            TRY AGAIN
+          </button>
+        </div>
       </div>
     </div>
-    <div id="loser" class="modal">
-      <div>
-        <h1>You Lose!</h1>
-        <p class="wordWas">The word was: </p>
-        <button id="loseBtn" class="restartBtn">
-          TRY AGAIN
-        </button>
-      </div>
-    </div>
-  </div>
-</body>
+  </body>
 </html>
