@@ -18,7 +18,10 @@ app.use(list)
 
 
 app.post('/api/items', function(req, res) {
-  res.send({items: ['item_1', 'item_2']})
+  res.send({items: [
+    {name: 'item_1', complete: false}, 
+    {name: 'item_2', complete: true},     
+  ]})
 })
 
 
