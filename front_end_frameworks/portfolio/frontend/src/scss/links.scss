@@ -1,0 +1,11 @@
+a {
+  color: var(--text-light);
+  text-decoration: none;
+  padding: 5px 20px;
+  font-variant: small-caps;
+
+  &:hover {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+}
