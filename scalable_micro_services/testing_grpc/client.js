@@ -37,6 +37,7 @@ function startChat() {
   channel.on("data", onData);
 
   rl.on("line", function(text) {
+    //Test performance
     var startTime = performance.now();
     client.send({ user: username, text: text }, res => {});
     var endTime = performance.now();

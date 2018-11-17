@@ -1,16 +1,17 @@
 <template>
   <nav class="nav">
-    <div class="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>    
-    <div class="items">
-      <router-link v-for="(page, index) in pages" :key="index" :to='page.link'>
-        {{page.name}}
-      </router-link>
+    <div class="container inner-container">
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>    
+      <div class="items">
+        <router-link v-for="(page, index) in pages" :key="index" :to='page.link'>
+          {{page.name}}
+        </router-link>
+      </div>
     </div>
-    
   </nav>
 </template>
 
@@ -21,7 +22,7 @@ export default {
     return {
       pages: [
         { link: '/', name: 'home' },
-        { link: '/about', name: 'about' },
+        // { link: '/about', name: 'about' },
         { link: '/portfolio', name: 'portfolio' },
         { link: '/products', name: 'products' },
         { link: '/workflow', name: 'workflow' },
@@ -35,9 +36,14 @@ export default {
 
 <style lang="scss" scoped>
   .nav {
-    width: 100vw;
+    width: 100%;
     background-color: #fff;
     font-size: 1.5em;
+    height: 64px;
+
+    position: absolute;
+    top: 0;
+    right: 0;
 
     .items {
       display: flex;
@@ -46,6 +52,10 @@ export default {
       justify-content: space-between;
       align-items: baseline;
       align-content: center;
+
+      a {
+        padding: 20px 0;
+      }
     }
 
     .hamburger {
@@ -67,7 +77,7 @@ export default {
       
       span {
         background-color: var(--text-light);
-        width: 100%;
+        // width: 100%;
         height: 4px;
         border-radius: 5px;
       }
@@ -85,11 +95,13 @@ export default {
       align-content: center;
 
       .items {
-        margin: -240px 0;
+        margin: -444px 0;
+        position: absolute;
       }
 
       a {
         width: 100%;
+        padding: 0 0;
         text-align: center;
       }
 
