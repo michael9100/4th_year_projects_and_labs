@@ -1,0 +1,82 @@
+@import 'src/scss/reset.scss';
+@import url('https://fonts.googleapis.com/css?family=Assistant:200,400|Poiret+One');
+@import 'src/scss/variables.scss';
+@import 'src/scss/grid.scss';
+
+@import 'src/scss/links.scss';
+
+body,html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.container {
+	padding: 0 20px;
+	height: 100%;
+}
+
+.inner-container {
+	margin: 0 auto;
+	max-width: 1600px;
+	height: 100%;
+}
+
+.page {
+	height: calc(100%);
+}
+
+body {
+	font-family: 'Assistant', sans-serif;
+	font-size: 16px;
+
+	h1, h2, h3, h4, h5, h6 {
+		font-family: 'Poiret One', sans-serif;
+	}
+
+	h1 {
+		font-size: 3em;
+		margin-top: 0.3em;
+		margin-bottom: 0.2em;
+	}
+
+	h2 {
+		font-size: 2em;
+		margin-top: 0.3em;
+		margin-bottom: 0.2em;
+	}
+	
+	h3 {
+		font-size: 1.5em;
+		margin-top: 0.3em;
+		margin-bottom: 0.2em;
+	}
+}
+
+.brand {
+	font-size: 3em;
+}
+
+.sub-brand {
+	font-weight: 200;
+	font-size: 1.2em;
+	margin-top: 0.2em;
+}
+
+p {
+	
+	a {
+		font-variant: normal;
+		padding: 0;
+		color: var(--dark-blue);
+	}
+	
+	&.p-large {
+		line-height: 1.4em;
+		color: var(--text-light)
+	}
+}
