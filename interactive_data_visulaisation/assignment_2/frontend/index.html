@@ -7,6 +7,19 @@
         margin: 0;
         overflow: hidden;
       }
+
+      #menu{
+        background-color: #ffffff;
+        border-radius: 10px;
+        color: #141414;
+        position: absolute;
+        padding: 10px 15px;
+        top: 0;
+        left: 0;
+        margin: 10px;
+        max-width: 350px;
+      }
+
       #map {
         height: 100vh;
         width: 100vw;
@@ -19,11 +32,24 @@
         stroke: #141414;
         stroke-width: .5;
       }
+      /* circle {
+        fill: #ffffff;
+        stroke: #c94444;
+        stroke-width: .5;
+      } */
     </style>
   </head>
   <body>
     <div id="container"></div>
     <div id="map"></div>
+    <div id="menu">
+      <div id="options">
+
+      </div>
+      <div id="ufoInfo">
+
+      </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -49,8 +75,6 @@
 
         let svg = d3.select('#map')
                   .append('svg')
-                  // .attr('width', width + margin.left + margin.right)
-                  // .attr('height', height + margin.top + margin.bottom)
                   .attr("width", "100%")
                   .attr("height", "100%")
                   .call(d3.zoom().on("zoom", function () {
@@ -78,9 +102,9 @@
 
         function ready (mapData, ufoData) {
           var countries = topojson.feature(mapData, mapData.objects.countries1).features
-          // var sightings = ufoData
+          var sightings = ufoData
 
-          // console.log(sightings)
+          console.log(sightings)
 
           svg.selectAll('.country')
             .data(countries)
@@ -88,13 +112,45 @@
             .attr('class', 'country')
             .attr('d', path)
 
-          // svg.selectAll('.sightings')
-          //   .data(sightings)
-          //   .enter().append('circle')
-          //   .attr('r', 2)
-          //   .attr('cx', 10)
-          //   .attr('cy', 10)
-          //   // .attr('d', path)
+          svg.selectAll('.sightings')
+            .data(sightings)
+            .enter().append('circle')
+            .attr('r', 1)
+            .attr('cx', (c) => {
+              var coords = projection([c.longitude, c.latitude])
+              return coords[0]
+            })
+            .attr('cy', (c) => {
+              var coords = projection([c.longitude, c.latitude])
+              return coords[1]
+            })
+            .on("mouseover", hoverPoint)
+            .on("mouseout", leavePoint);
+
+        }
+
+        function hoverPoint(d, i) {
+          // Use D3 to select element, change color and size
+          d3.select(this).attr({
+            fill: "orange",
+            r: 1 * 2
+          })
+
+          let info = $('#ufoInfo')
+          info.empty()
+          info.append(`
+            <p>Type: ${d.shape}</p>
+            <p>City: ${d.city}</p>
+            <p>Country: ${d.country}</p>
+            <p>Duration: ${d.duration_h_m}</p>
+            <p>Date and Time: ${d.datetime}</p>
+            <p>Comments: ${d.comments}</p>
+          `)
+          
+        }
+
+        function leavePoint(d, i) {
+          
         }
       })();
     </script>
