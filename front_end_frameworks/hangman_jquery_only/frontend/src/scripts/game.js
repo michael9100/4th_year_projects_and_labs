@@ -211,6 +211,10 @@ function initAuth() {
                 alert(`${email} is already in user. Did you mean to login?`)
                 return
             }
+            else if (email.toLowerCase().trim() === "" || password.toLowerCase().trim() === "") {
+                alert(`Email or Password cannot be blank!`)
+                return
+            }
             else {
                 user = {
                     "email": email,

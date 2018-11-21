@@ -1,6 +1,7 @@
 let grpc = require("grpc");
 var protoLoader = require("@grpc/proto-loader");
 var readline = require("readline");
+const { PerformanceObserver, performance } = require("perf_hooks");
 
 //Read terminal Lines
 var rl = readline.createInterface({
@@ -19,7 +20,7 @@ var proto = grpc.loadPackageDefinition(
   })
 );
 
-const REMOTE_SERVER = "localhost:5001";
+const REMOTE_SERVER = "0.0.0.0:5001";
 
 let username;
 
@@ -36,7 +37,13 @@ function startChat() {
   channel.on("data", onData);
 
   rl.on("line", function(text) {
+    //Test performance
+    var startTime = performance.now();
     client.send({ user: username, text: text }, res => {});
+    var endTime = performance.now();
+    console.log(
+      "client.send() took " + (endTime - startTime) + " milliseconds."
+    );
   });
 }
 

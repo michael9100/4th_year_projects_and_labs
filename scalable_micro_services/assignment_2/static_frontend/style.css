@@ -1,0 +1,7 @@
+li {
+    font-size: 1.5em;
+}
+
+li.strike {
+    text-decoration: line-through;
+}

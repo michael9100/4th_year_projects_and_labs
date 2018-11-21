@@ -15,15 +15,17 @@
     <h1>ToDo gRPC</h1>
 
     <ol id="list">
-      <li>
+      <!-- <li>
         Do this thing today <small>by mike</small>
         <button class="button button-clear">Mark Complete</button>
-      </li>
+      </li> -->
     </ol>
 
-    <label for="itemInput">Add an Item</label>
-    <input type="text" name="itemInput" id="itemInput">
-    <button id="addBtn">Add</button>
+    <form onsubmit="event.preventDefault()">
+      <label for="itemInput">Add an Item</label>
+      <input type="text" name="itemInput" id="itemInput">
+      <button id="addBtn">Add</button>
+    </form>
   </div>
 
 </body>

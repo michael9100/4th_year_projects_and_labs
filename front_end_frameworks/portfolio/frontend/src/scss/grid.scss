@@ -1,0 +1,23 @@
+.row {
+  display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: stretch;
+	align-content: stretch;
+  
+  .col {
+    padding: 0 5px;
+  }
+  .col-50 {
+    max-width: 50%;
+  }
+}
+
+.row-100 {
+  height: 100%;
+}
+
+.center-v {
+	align-self: center;
+}

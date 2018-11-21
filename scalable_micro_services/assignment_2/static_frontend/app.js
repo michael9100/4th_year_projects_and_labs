@@ -15,13 +15,53 @@ function updateList(listElement, array) {
   var completeBtn;
   for (i = 0; i < array.length; i++) {
     item = document.createElement('LI')
-    text = document.createTextNode(array[i])
+    text = document.createTextNode(array[i].name)
+
     completeBtn = document.createElement('BUTTON')
-      .classList = 'button button-clear'
+    completeBtn.classList = 'button button-clear'
+    completeBtn.innerText = 'Mark Complete'
+
+    if (array[i].complete) {
+      item.classList = 'strike'
+      completeBtn.disabled = true
+    }
+    
+    completeBtn.addEventListener("click", function (b){
+      completeToDo(b)
+    })
+
     item.appendChild(text)
     item.appendChild(completeBtn)
     listElement.appendChild(item)
   }
+}
+
+function completeToDo(todo) {
+  var item = todo.srcElement.parentNode
+
+  item.classList = 'strike'
+  todo.srcElement.disabled = true
+}
+
+function addToDo(listElement, toDoItem) {
+  var item;
+  var text;
+  var completeBtn;
+
+  item = document.createElement('LI')
+  text = document.createTextNode(toDoItem)
+
+  completeBtn = document.createElement('BUTTON')
+  completeBtn.classList = 'button button-clear'
+  completeBtn.innerText = 'Mark Complete'
+
+  completeBtn.addEventListener("click", function (b){
+    completeToDo(b)
+  })
+
+  item.appendChild(text)
+  item.appendChild(completeBtn)
+  listElement.appendChild(item)
 }
 
 
@@ -34,4 +74,13 @@ $( document ).ready(function() {
     updateList(listElement, todos)
   })
 
+
+  // event listeners
+  // add item
+  document.getElementById("addBtn").addEventListener("click", function (){
+    var todo = document.getElementById('itemInput').value
+    console.log("Todo", todo)
+    var listElement = document.getElementById('list')
+    addToDo(listElement, todo)
+  })
 })
