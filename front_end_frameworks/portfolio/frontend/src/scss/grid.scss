@@ -21,3 +21,16 @@
 .center-v {
 	align-self: center;
 }
+
+@media(max-width:680px){
+  .row {
+    flex-direction: column;
+
+    .col {
+      padding: 0 5px;
+    }
+    .col-50 {
+      max-width: 100%;
+    }
+  }
+}

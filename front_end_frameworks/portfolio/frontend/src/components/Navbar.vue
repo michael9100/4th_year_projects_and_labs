@@ -13,11 +13,11 @@
           </span>
         </router-link>
       </div>
-      <router-link :to='this.$router.currentRoute.name' v-if="!menuOpen" id="current-page">
+      <a v-if="!menuOpen" id="current-page">
         <span>  
           {{this.$router.currentRoute.name}}
         </span>
-      </router-link>
+      </a>
     </div>
   </nav>
 </template>
@@ -59,6 +59,11 @@ export default {
     z-index: 9999;
 
     #current-page {
+      color : var(--text-lighter);
+      text-decoration: none;
+      display: none;
+      width: 0;
+      margin: 14px 20px 0 0;
       span {          
         position: relative;
 
@@ -72,7 +77,6 @@ export default {
           height: 0.6em;
           z-index: -1;
           text-shadow: none;
-          transition: width 0.5s
         }
       }
     }
@@ -204,12 +208,6 @@ export default {
     }
 
     @media (max-width:964px){
-      // flex-direction: column;
-      // flex-wrap: wrap;
-      // justify-content: space-between;
-      // align-items: center;
-      // align-content: center;
-
       .items {
         margin: 0 0;
         position: absolute;
@@ -230,6 +228,10 @@ export default {
         }
       }
 
+      #current-page {
+        display: inline-block;
+      }
+
       a {
         width: 100%;
         padding: 0 0;
@@ -240,5 +242,6 @@ export default {
         display: flex;
       }
     }
+
   }
 </style>

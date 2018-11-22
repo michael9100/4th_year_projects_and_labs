@@ -11,7 +11,7 @@
 import TileList from '@/components/TileList.vue'
 
 export default {
-  name: 'home',
+  name: 'portfolio',
   components: {
   },
   components: {
