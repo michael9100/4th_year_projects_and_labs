@@ -9,7 +9,7 @@
           <p class="p-large">
             Hello, my name is Michael O'Connell, a web developer from Cork City in Ireland.
             I work mainly with JavaScript and it's ever growing list of frameworks. 
-            Currently, I work mainly with <a href="https://vuejs.org/" target="_blank">Vue</a> 
+            Currently, I work with <a href="https://vuejs.org/" target="_blank">Vue</a> 
             and <a href="https://expressjs.com/" target="_blank">Node</a>, feel free to check out my 
             <router-link to='/portfolio'>portfolio</router-link>. My interests are SAAS, 
             Entrepreneurship, and building useful tools, you can see my useful tools 

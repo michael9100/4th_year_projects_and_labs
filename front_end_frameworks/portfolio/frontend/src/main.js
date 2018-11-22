@@ -3,7 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import 'animate.css/animate.min.css'
+import {VueMasonryPlugin} from 'vue-masonry'
+Vue.use(VueMasonryPlugin) 
 
 Vue.config.productionTip = false
 

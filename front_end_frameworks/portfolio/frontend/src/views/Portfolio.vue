@@ -22,7 +22,7 @@ export default {
 
 <style lang="scss" scoped>
 .page-portfolio {
-  padding-top: 64px;
+  // padding-top: 64px;
 }
 </style>
 
