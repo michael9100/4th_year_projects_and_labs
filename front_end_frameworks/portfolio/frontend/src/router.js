@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Portfolio from './views/Portfolio.vue'
+import PortfolioPiece from './views/PortfolioPiece.vue'
 import Products from './views/Products.vue'
 import Workflow from './views/Workflow.vue'
 import Blog from './views/Blog.vue'
@@ -24,6 +25,10 @@ export default new Router({
       path: '/portfolio',
       name: 'portfolio',
       component: Portfolio
+    },
+    { 
+      path: '/portfolio/:id', 
+      component: PortfolioPiece 
     },
     {
       path: '/products',

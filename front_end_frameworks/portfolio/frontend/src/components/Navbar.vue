@@ -14,8 +14,11 @@
         </router-link>
       </div>
       <a v-if="!menuOpen" id="current-page">
-        <span>  
+        <span v-if="showRouteName">
           {{this.$router.currentRoute.name}}
+        </span>
+        <span v-else @click="$router.push('/portfolio')" class="back-to">
+          back to portfolio
         </span>
       </a>
     </div>
@@ -27,7 +30,8 @@ export default {
   name: 'Nav',
   data() {
     return {
-    menuOpen: false,
+      menuOpen: false,
+      showRouteName: true,
       pages: [
         { link: '/', name: 'home' },
         { link: '/portfolio', name: 'portfolio' },
@@ -39,9 +43,24 @@ export default {
     }
   },
   methods: {
+    init: function () {
+      this.showRouteName = !this.ifPortfolioItem()
+    },
     toggle: function() {
       this.menuOpen = !this.menuOpen
+    },
+    ifPortfolioItem: function () {
+      let regex = /^\/portfolio\/((?:[^\/]+?))(?:\/(?=$))?$/
+      return regex.test(this.$router.currentRoute.path)
     }
+  },
+  watch: {
+    $route (to, from){
+      this.showRouteName = !this.ifPortfolioItem()
+    }
+  },
+  mounted(){
+    this.init()
   }
 }
 </script>
@@ -66,6 +85,10 @@ export default {
       margin: 14px 20px 0 0;
       span {          
         position: relative;
+
+        &.back-to {
+          cursor: pointer;
+        }
 
         &::after {
           content: "";
