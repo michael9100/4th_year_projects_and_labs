@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Portfolio from './views/Portfolio.vue'
 import PortfolioPiece from './views/PortfolioPiece.vue'
 import Products from './views/Products.vue'
+import Product from './views/Product.vue'
 import Workflow from './views/Workflow.vue'
 import Blog from './views/Blog.vue'
 import Contact from './views/Contact.vue'
@@ -34,6 +35,10 @@ export default new Router({
       path: '/products',
       name: 'products',
       component: Products
+    },
+    {
+      path: '/products/:id',
+      component: Product
     },
     {
       path: '/workflow',

@@ -17,8 +17,8 @@
         <span v-if="showRouteName">
           {{this.$router.currentRoute.name}}
         </span>
-        <span v-else @click="$router.push('/portfolio')" class="back-to">
-          back to portfolio
+        <span v-else @click="$router.push('\/' + parentPage)" class="back-to">
+          back to {{parentPage}}
         </span>
       </a>
     </div>
@@ -32,6 +32,7 @@ export default {
     return {
       menuOpen: false,
       showRouteName: true,
+      parentPage: '',
       pages: [
         { link: '/', name: 'home' },
         { link: '/portfolio', name: 'portfolio' },
@@ -44,20 +45,29 @@ export default {
   },
   methods: {
     init: function () {
-      this.showRouteName = !this.ifPortfolioItem()
+      this.showRouteName = !this.ifNestedItem()
+      this.parentPage = this.compParentPage()
     },
     toggle: function() {
       this.menuOpen = !this.menuOpen
     },
-    ifPortfolioItem: function () {
-      let regex = /^\/portfolio\/((?:[^\/]+?))(?:\/(?=$))?$/
+    ifNestedItem: function () {
+      console.log(this.$router.currentRoute)
+      let regex = /^(\/portfolio|\/products)\/((?:[^\/]+?))(?:\/(?=$))?$/
       return regex.test(this.$router.currentRoute.path)
+    },
+    compParentPage: function () {
+      var res = this.$router.currentRoute.path.split("/")
+      return res[1]
     }
   },
   watch: {
     $route (to, from){
-      this.showRouteName = !this.ifPortfolioItem()
+      this.showRouteName = !this.ifNestedItem()
+      this.parentPage = this.compParentPage()
     }
+  },
+  computed: {
   },
   mounted(){
     this.init()
