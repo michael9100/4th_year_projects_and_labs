@@ -14,6 +14,17 @@
             {{productData.description}}
           </p>
         </div>
+        <div class="links-container">
+          <a href="https://github.com/MichaelWebCork" target="_blank" class="btn btn-round" >
+            <v-icon name="github"></v-icon>
+          </a>
+          <a href="https://www.facebook.com/MichaelWebCork/" target="_blank" class="btn btn-round" >
+            <v-icon name="facebook"></v-icon>
+          </a>
+          <a href="https://www.instagram.com/michaelwebcork/" target="_blank" class="btn btn-round" >
+            <v-icon name="instagram"></v-icon>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -30,13 +41,13 @@ export default {
 }
 </script>
 
+
 <style lang="scss" scoped>
 .page {
   padding-top: 64px;
 }
 .main-img {
   width: 66.66%;
-  height: 55%;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -47,31 +58,45 @@ export default {
 .inner-container {
   margin: 0 auto;
   max-width: 1600px;
-  height: 100%;
+  max-height: 800px;
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: safe;
-  align-content: center;
+  align-content: start;
+}
+.main-section {
+  height: 55vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: safe;
+  align-content: start;
 }
 .left-col {
   padding: 0 20px;
   display: inline-block;
   width: 33.33%;
-  height: 55%;
   display: inline-flex;
 	flex-direction: column;
 	flex-wrap: nowrap;
 	justify-content: center;
 	align-items: center;
-	align-content: center;
+  align-content: center;
+  position: relative;
+  
   
   .col-inner {
     top: 50%;
-    // transform: translateY(-50%);
+    width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
     p {
       line-height: 1.5em;
+      padding-bottom: 2em;
     }
   }
 
@@ -99,6 +124,68 @@ export default {
       }
     }
   }
+
+  .links-container {
+    bottom: 0;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: stretch;
+    width: 100%;
+    padding: 10px 20px;
+  }
+}
+// .img-thumbs-container {
+//   width: 100%;
+//   flex-direction: row;
+// 	flex-wrap: wrap;
+// 	justify-content: flex-start;
+// 	align-items: stretch;
+// 	align-content: flex-start;
+//   margin: 1em 0;
+
+//   img {
+//     max-width: 100%;
+//     height: auto;
+//   }
+//   .slide-img-container {
+//     height: 200px;
+//     background-position: center;
+//     background-size: cover;
+//     background-repeat: no-repeat;
+//   }
+// }
+
+@media only screen and (max-width: 800px) {
+  .main-section {
+    height: unset;
+  }
+  .inner-container {
+    flex-direction: column;
+    justify-content: unset;
+    flex-wrap: unset;
+    height: unset;
+    max-height: unset;
+
+    .main-img {
+      width: 100%;
+      height: 20vh;
+    }
+    .left-col {
+      width: 100%;
+      height: unset;
+      padding-bottom: 40px;
+
+      .col-inner {
+        p {
+          line-height: 1.5em;
+          padding-bottom: 1em;
+        }
+      }
+    }
+  }
 }
 </style>
-

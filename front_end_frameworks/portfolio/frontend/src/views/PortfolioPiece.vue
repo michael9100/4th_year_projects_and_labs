@@ -1,29 +1,31 @@
 <template>
   <div class="page page-portfolio-piece">
     <div class="inner-container">
-      <div class="main-img" :style="{ 'background-image' : 'url(\'' + portfolioData.imgSrc + '\')' }">
-      </div>
-      <div class="left-col">
-        <div class="col-inner">
-          <h1>
-            <span>
-              {{portfolioData.title.toLowerCase()}}
-            </span>
-          </h1>
-          <p>
-            {{portfolioData.description}}
-          </p>
+      <div class="main-section">
+        <div class="main-img" :style="{ 'background-image' : 'url(\'' + portfolioData.imgSrc + '\')' }">
         </div>
-        <div class="links-container">
-          <a href="https://github.com/MichaelWebCork" target="_blank" class="btn btn-round" >
-            <v-icon name="github"></v-icon>
-          </a>
-          <a href="https://www.facebook.com/MichaelWebCork/" target="_blank" class="btn btn-round" >
-            <v-icon name="facebook"></v-icon>
-          </a>
-          <a href="https://www.instagram.com/michaelwebcork/" target="_blank" class="btn btn-round" >
-            <v-icon name="instagram"></v-icon>
-          </a>
+        <div class="left-col">
+          <div class="col-inner">
+            <h1>
+              <span>
+                {{portfolioData.title.toLowerCase()}}
+              </span>
+            </h1>
+            <p>
+              {{portfolioData.description}}
+            </p>
+          </div>
+          <div class="links-container">
+            <a href="https://github.com/MichaelWebCork" target="_blank" class="btn btn-round" >
+              <v-icon name="github"></v-icon>
+            </a>
+            <a href="https://www.facebook.com/MichaelWebCork/" target="_blank" class="btn btn-round" >
+              <v-icon name="facebook"></v-icon>
+            </a>
+            <a href="https://www.instagram.com/michaelwebcork/" target="_blank" class="btn btn-round" >
+              <v-icon name="instagram"></v-icon>
+            </a>
+          </div>
         </div>
       </div>
       <div v-if="portfolioData.imgs" class="img-thumbs-container">
@@ -81,7 +83,7 @@ export default {
 }
 .main-img {
   width: 66.66%;
-  height: 55%;
+  // height: 55%;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -92,7 +94,16 @@ export default {
 .inner-container {
   margin: 0 auto;
   max-width: 1600px;
-  height: 100%;
+  // height: 55vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: safe;
+  align-content: start;
+}
+.main-section {
+  height: 55vh;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -104,7 +115,6 @@ export default {
   padding: 0 20px;
   display: inline-block;
   width: 33.33%;
-  height: 55%;
   display: inline-flex;
 	flex-direction: column;
 	flex-wrap: nowrap;
@@ -117,9 +127,12 @@ export default {
   .col-inner {
     top: 50%;
     width: 100%;
-    // transform: translateY(-50%);
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
     p {
       line-height: 1.5em;
+      padding-bottom: 2em;
     }
   }
 
@@ -184,18 +197,30 @@ export default {
 }
 
 @media only screen and (max-width: 800px) {
+  .main-section {
+    height: unset;
+  }
   .inner-container {
     flex-direction: column;
     justify-content: unset;
+    flex-wrap: unset;
+    height: unset;
     
     .main-img {
       width: 100%;
-      height: 20%;
+      height: 20vh;
     }
     .left-col {
       width: 100%;
       height: unset;
       padding-bottom: 40px;
+
+      .col-inner {
+        p {
+          line-height: 1.5em;
+          padding-bottom: 1em;
+        }
+      }
     }
   }
 }
