@@ -1,7 +1,17 @@
 <template>
   <ul>
     <li v-for="(img, i) in imgs" :key="i">
-      <router-link :to='`${$router.currentRoute.name}/${i}`'> 
+      <a v-if="img.url" :href='img.url'> 
+        <div
+          class="portfolio-image" 
+          :style="{ 'background-image' : 'url(\'' + img.imgSrc + '\')' }"
+        >
+        </div>
+        <div class="hover-title">
+          {{img.title.toLowerCase()}}
+        </div>
+      </a>
+      <router-link v-else :to='`${$router.currentRoute.name}/${i}`'> 
         <div
           class="portfolio-image" 
           :style="{ 'background-image' : 'url(\'' + img.imgSrc + '\')' }"
@@ -22,7 +32,7 @@ export default {
   data() {
     return {
     }
-  },
+  }
 }
 </script>
 
