@@ -52,7 +52,6 @@ export default {
       this.menuOpen = !this.menuOpen
     },
     ifNestedItem: function () {
-      console.log(this.$router.currentRoute)
       let regex = /^(\/portfolio|\/products)\/((?:[^\/]+?))(?:\/(?=$))?$/
       return regex.test(this.$router.currentRoute.path)
     },

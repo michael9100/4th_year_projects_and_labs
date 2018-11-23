@@ -42,15 +42,6 @@ export default {
       baseUrl: process.env.BASE_URL
     }
   }
-  // mounted() {
-  //   console.log("test")
-  //   // new Vivus('mike-svg', {duration: 200, file: 'assets/mike.svg'});
-  //   new Vivus('my-svg', {
-  //     type: "sync",
-  //     animTimingFunction: Vivus.EASE,
-  //     duration: 3000,
-  //   });
-  // }
 }
 </script>
 
