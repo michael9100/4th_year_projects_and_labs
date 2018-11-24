@@ -4,13 +4,13 @@
     <div class="bg-image"></div>
     <div class="inner-container">
       <form action="https://formspree.io/m.oconnell56@yahoo.ie" method="POST">
-        <input type="hidden" name="_next" value="https://site.io/thanks.html">
+        <!-- <input type="hidden" name="_next" value="https://site.io/thanks.html"> -->
         <input type="text" name="_gotcha" style="display:none">
         <input type="hidden" name="_subject">
-        <input type="text" name="name" class="inputFields" placeholder="Full Name">
-        <input type="email" name="_replyto" class="inputFields" placeholder="examle@example.com">
-        <textarea class="inputFields" placeholder="Write a message here..."></textarea>
-        <input type="submit" value="Send">
+        <input v-model="fullName" type="text" name="name" class="inputFields" placeholder="Full Name" @blur="isFormComplete" @input="isFormComplete">
+        <input v-model="email" type="email" name="_replyto" class="inputFields" placeholder="examle@example.com" @blur="isFormComplete" @input="isFormComplete">
+        <textarea v-model="message" class="inputFields" placeholder="Write a message here..." @blur="isFormComplete" @input="isFormComplete"></textarea>
+        <input type="submit" value="Send" :disabled="!allowSend">
       </form>
     </div>
   </div>
@@ -21,7 +21,23 @@
 
 export default {
   name: 'contact',
-  components: {
+  data () {
+    return {
+      allowSend: false,
+      fullName: null,
+      email: null,
+      message: null,
+    }
+  },
+  methods: {
+    isFormComplete() {
+      if (this.fullName != null && this.email != null && this.message != null) {
+        this.allowSend = true
+      }
+      else {
+        this.allowSend = false
+      }
+    }
   }
 }
 </script>
@@ -103,6 +119,14 @@ input[type="submit"] {
   width: 29%;
   margin-left: auto;
   transition: all .5s;
+
+  &:disabled {
+    opacity: .5;
+    &:hover {
+      width: 29%;
+    }
+  }
+
   &:hover {
     width: 30%;
   }
