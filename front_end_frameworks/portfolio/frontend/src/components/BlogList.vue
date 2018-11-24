@@ -23,5 +23,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+li {
+  margin: 20px 0;
+}
 </style>

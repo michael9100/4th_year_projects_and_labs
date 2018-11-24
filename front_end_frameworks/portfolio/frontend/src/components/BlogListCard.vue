@@ -1,5 +1,8 @@
 <template>
-  <div class="blog-card" :style="{ 'background-image' : 'url(\'' + post.featuredImg + '\')' }">
+  <router-link
+    class="blog-card" 
+    :style="{ 'background-image' : 'url(\'' + post.featuredImg + '\')' }" 
+    :to='`${$router.currentRoute.name}/${number}`'> 
     <!-- {{post}} -->
     <div class="header">
       <span></span>
@@ -11,9 +14,8 @@
     </div>
     <div class="footer">
       <div>23-06-2010</div>
-      <!-- <a href="#">Read Post</a> -->
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -32,7 +34,8 @@ export default {
   height: 350px;
   box-shadow: 0px 4px 38px -15px #696969;
   overflow: hidden;
-  margin: 20px;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

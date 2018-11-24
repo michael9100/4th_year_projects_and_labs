@@ -37,7 +37,7 @@ export default {
         { link: '/', name: 'home' },
         { link: '/portfolio', name: 'portfolio' },
         { link: '/products', name: 'products' },
-        { link: '/workflow', name: 'workflow' },
+        // { link: '/workflow', name: 'workflow' },
         { link: '/blog', name: 'blog' },
         { link: '/contact', name: 'contact' },
       ]
@@ -52,7 +52,7 @@ export default {
       this.menuOpen = !this.menuOpen
     },
     ifNestedItem: function () {
-      let regex = /^(\/portfolio|\/products)\/((?:[^\/]+?))(?:\/(?=$))?$/
+      let regex = /^(\/portfolio|\/products|\/blog)\/((?:[^\/]+?))(?:\/(?=$))?$/
       return regex.test(this.$router.currentRoute.path)
     },
     compParentPage: function () {
