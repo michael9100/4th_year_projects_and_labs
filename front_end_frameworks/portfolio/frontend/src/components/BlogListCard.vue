@@ -3,7 +3,7 @@
     <!-- {{post}} -->
     <div class="header">
       <span></span>
-      <div>Blog Post</div>
+      <div>Blog Post #{{number + 1}}</div>
     </div>
     <div class="image-overlay">
       <p class="title">{{post.title}}</p>
@@ -19,7 +19,7 @@
 <script>
 export default {
   name: 'blog-post',
-  props: ['post'],
+  props: ['post', 'number'],
   data() {
     return {
     }

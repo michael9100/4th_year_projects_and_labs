@@ -1,7 +1,7 @@
 <template>
   <ul>
     <li v-for="(post, i) in posts" :key="i">
-      <BlogListCard :post="post"></BlogListCard>
+      <BlogListCard :post="post" :number="i"></BlogListCard>
     </li>
   </ul>
 </template>
