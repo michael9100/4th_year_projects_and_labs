@@ -23,13 +23,11 @@ app.use(passport.session())
 let users = [  
   {
     id: 1,
-    name: "Jude",
     email: "test@test.com",
     password: "test"
   },
   {
     id: 2,
-    name: "Emma",
     email: "emma@email.com",
     password: "password2"
   }
@@ -68,8 +66,6 @@ passport.deserializeUser((id, done) => {
   done(null, user)
 })
 
-
-
 // require('./api')(app)
 const authMiddleware = (req, res, next) => {  
   if (!req.isAuthenticated()) {
@@ -79,28 +75,50 @@ const authMiddleware = (req, res, next) => {
   }
 }
 
+//================================================
+//    Endpoints
+//================================================
+app.post("/api/register", (req, res, next) => {  
+  console.log(req.body)
+  let user = users.find((user) => {
+    return user.email === req.body.email
+  })
+  if (!user) {
+    users.push({
+      id: users.length+1,
+      email: req.body.email,
+      password: req.body.password,
+    })
+    console.log('user created')
+    res.send("Account created")
+  } else {
+    console.log('user already')
+    return res.status(409).send("User email already registered")
+  }
+})
+
 app.post("/api/login", (req, res, next) => {  
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      return next(err);
+      return next(err)
     }
     
     if (!user) {
-      return res.status(400).send([user, "Cannot log in serv", info]);
+      return res.status(400).send([user, "Cannot log in serv", info])
     }
 
     req.login(user, err => {
-      res.send("Logged in");
+      res.send("Logged in")
     })
   })(req, res, next)
 })
 
 app.get("/api/logout", function(req, res) {  
-  req.logout();
+  req.logout()
 
-  console.log("logged out")
+  console.log('logged out')
 
-  return res.send();
+  return res.send()
 })
 
 app.get("/api/user", authMiddleware, (req, res) => {  

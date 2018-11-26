@@ -15,10 +15,24 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
     Navbar
+  },
+  methods: {
+    ...mapActions([
+      'setLoggedIn'
+    ]),
+  },
+  mounted() {
+    if (sessionStorage.getItem('tattbooksAuth') != null) {
+      this.setLoggedIn(true)
+    }
+    else {
+      this.setLoggedIn(false)
+    }
   }
 }
 </script>

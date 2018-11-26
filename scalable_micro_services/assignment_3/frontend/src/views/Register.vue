@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'register',
   data () {
@@ -36,11 +38,25 @@ export default {
     }
   },
   methods: {
-    onSubmit (evt) {
-      evt.preventDefault();
-      alert(JSON.stringify(this.form));
+    ...mapActions([
+      'register',
+      'login'
+    ]),
+    async onSubmit (e) {
+      e.preventDefault();
+      await this.register(this.form)
+      if (this.isLoggedIn) {
+        console.log(true)
+        await this.login(this.form)
+      }
+      this.$router.push('dashboard')
     }
-  }
+  },
+  computed: {
+    isLoggedIn () {
+      return this.$store.state.auth.loggedIn
+    }
+  },
 }
 </script>
 

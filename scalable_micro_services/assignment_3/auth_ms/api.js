@@ -20,8 +20,6 @@ module.exports = function(app){
   app.get("/api/logout", function(req, res) {  
     req.logout();
   
-    console.log("logged out")
-  
     return res.send();
   })
 
