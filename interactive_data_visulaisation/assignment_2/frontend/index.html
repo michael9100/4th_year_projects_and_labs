@@ -18,6 +18,27 @@
         left: 0;
         margin: 10px;
         max-width: 350px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: stretch;
+        align-content: stretch;
+      }
+
+      label {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: stretch;
+        align-content: stretch;
+        margin: 16px 0;
+      }
+
+      label span {
+        width: 100%;
+        padding: 0 10px;
       }
 
       #map {
@@ -25,17 +46,51 @@
         width: 100vw;
       }
       svg {
-        background-color: #f1f1f1;
+        background-color: #aacfff;
       }
       .country {
-        fill: #b8b8b8;
-        stroke: #141414;
+        fill: #40883e;
+        stroke: #e7e5d2;
         stroke-width: .5;
       }
+      .point:hover {
+        fill: orange;
+      }
+      .range_container {
+        position: absolute;
+        bottom: 0;
+        padding: 20px 0;
+        width: 100%;
+      }
+      .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 15px;
+        border-radius: 5px;
+        background: #ffffff;
+        outline: none;
+        -webkit-transition: .2s;
+      }
+
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%; 
+        background: #FF5A5F;
+        cursor: pointer;
+      }
+
+      .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #FF5A5F;
+        cursor: pointer;
+      }
       /* circle {
-        fill: #ffffff;
-        stroke: #c94444;
-        stroke-width: .5;
+        fill: #3C3C3C
       } */
     </style>
   </head>
@@ -43,12 +98,41 @@
     <div id="container"></div>
     <div id="map"></div>
     <div id="menu">
-      <div id="options">
-
-      </div>
       <div id="ufoInfo">
-
+        <p>Show all with same:</p>
+        <label for="">
+          Type: 
+            <span id="type"></span>
+            <input type="checkbox" name="type" class="checkbox" id="check-type">
+        </label>
+        <label for="">
+          City: 
+            <span id="city"></span>
+            <input type="checkbox" name="city" class="checkbox" id="check-city">
+        </label>
+        <label for="">
+          Country:  
+            <span id="country"></span>
+            <input type="checkbox" name="country" class="checkbox" id="check-country">
+        </label>
+        <label for="">
+          Duration:  
+            <span id="duration"></span>
+            <input type="checkbox" name="duration" class="checkbox" id="check-duration">
+        </label>
+        <label for="">
+          Date and Time:  
+            <span id="dateTime"></span>
+            <input type="checkbox" name="dateTime" class="checkbox" id="check-dateTime">
+        </label>
+        <label for="">
+          Comments:  
+            <span id="comments"></span>
+        </label>
       </div>
+    </div>
+    <div class="range_container">
+      <input type="range" min="1" max="100" class="slider" id="yearSlider">
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
@@ -56,12 +140,10 @@
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
       crossorigin="anonymous">
     </script>
+    <script src="moment.min.js"></script>
 
     <script>
       (() => {
-        // d3.select(window)
-        //   .on("resize", sizeChange);
-        
         let margin = {
           top: 0,
           left: 0,
@@ -72,39 +154,67 @@
         // let height = 400 - margin.top - margin.bottom
         let width = window.innerWidth
         let height = window.innerHeight
+        
+        let currentPoint
 
+        let black = '#3C3C3C'
+        let red = '#FF5A5F'
+        let blue = '#1098F7'
+        let orange = '#FFAF0F'
+
+        let yearSlider = document.querySelector('#yearSlider')
+        
         let svg = d3.select('#map')
-                  .append('svg')
-                  .attr("width", "100%")
-                  .attr("height", "100%")
-                  .call(d3.zoom().on("zoom", function () {
-                    svg.attr("transform", d3.event.transform)
-                  }))
-                  .append('g')
-                  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-
+        .append('svg')
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .call(d3.zoom().on("zoom", function () {
+          // console.log(d3.event.transform)
+          svg.attr("transform", d3.event.transform)
+          zoomSightings()
+        }))
+        .append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+        
         // d3.json("world.topojson")
         let loadMap = d3.json('https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json')
-
+        
         let loadUFOS = d3.csv('ufos.csv')
-
+        
+        d3.selectAll(".checkbox").on("change", updateFilter)
+        
         Promise.all([loadMap, loadUFOS]).then(function(values) {
           ready(values[0], values[1])
         })
-
-
+        
+        
         let projection = d3.geoMercator()
-          .translate([width / 2, height / 2])
-          .scale(300)
-          
+        .translate([width / 2, height / 2])
+        .scale(300)
+        
         var path = d3.geoPath().projection(projection)
-
+        
+        
+        Array.prototype.groupByDate = function(prop) {
+          return this.reduce(function(groups, item) {
+            const val = moment(item.datetime).year()
+            groups[val] = groups[val] || []
+            groups[val].push(item)
+            return groups
+          }, {})
+        }
 
         function ready (mapData, ufoData) {
           var countries = topojson.feature(mapData, mapData.objects.countries1).features
           var sightings = ufoData
+          let info = $('#ufoInfo')
+          let minDate = moment(sightings[0].datetime).year()
+          let maxDate = moment(sightings[sightings.length-1].datetime).year()
+          let sightingsByYear = sightings.groupByDate()
 
-          console.log(sightings)
+          yearSlider.setAttribute('min', minDate)
+          yearSlider.setAttribute('max', maxDate)
+          yearSlider.addEventListener('input', function(e) {yearChange(e.target.value, sightingsByYear)})
 
           svg.selectAll('.country')
             .data(countries)
@@ -112,10 +222,92 @@
             .attr('class', 'country')
             .attr('d', path)
 
+          // svg.selectAll('.sightings')
+          //   .data(sightings)
+          //   .enter().append('circle')
+          //   .attr('fill', black)
+          //   .attr('class', function(d) { return "point " + d.shape })
+          //   .attr('data-type', function(d) { return d.shape })      
+          //   .attr('data-city', function(d) { return d.city })      
+          //   .attr('data-country', function(d) { return d.country })      
+          //   .attr('data-duration', function(d) { return d.duration_h_m })      
+          //   .attr('data-datetime', function(d) { return d.datetime })      
+          //   .attr('r', 1.5)
+          //   .attr('cx', (c) => {
+          //     var coords = projection([c.longitude, c.latitude])
+          //     return coords[0]
+          //   })
+          //   .attr('cy', (c) => {
+          //     var coords = projection([c.longitude, c.latitude])
+          //     return coords[1]
+          //   })
+          //   .on("click", clickPoint)
+          //   .on("mouseout", leavePoint);
+        }
+
+        function clickPoint(d, i) {
+          currentPoint = this
+          // let point = this
+          const date = moment(d.datetime).year()
+          console.log(date)
+          $('#type').text(d.shape)
+          $('#city').text(d.city)
+          $('#country').text(d.country)
+          $('#duration').text(d.duration_h_m)
+          $('#dateTime').text(date)
+          $('#comments').text(d.comments)
+
+          updateFilter()
+          // currentPoint.setAttribute('fill', 'orange')
+        }
+
+        function leavePoint(d, i) {
+          
+        }
+
+        function zoomSightings() {
+          let zoomLevel = d3.event.transform.k / 5
+          if (zoomLevel > 1) {
+            svg.selectAll('.point').attr('r', 1 / zoomLevel)
+          }
+          else {
+            svg.selectAll('.point').attr('r', 1.5)
+          }
+        }
+
+        function updateFilter(p) {
+          let choices = []
+          d3.selectAll('.point').attr("fill", black)
+          d3.selectAll(".checkbox").each(function(d){
+            checkbox = d3.select(this)
+            if(checkbox.property("checked")){
+              choices.push(checkbox.property("name"))
+            }
+          })
+          
+          if (choices.length > 0) {
+            queryString = ``;
+            for (i = 0; i < choices.length; i++) {
+              queryString += `[data-${choices[i]}="${document.getElementById(choices[i]).innerText}"]`
+            }
+            d3.selectAll(queryString).attr("fill", red)
+          }
+          currentPoint.setAttribute('fill', orange)
+        }
+
+        function yearChange (year, sightings) {
+          console.log(year)
           svg.selectAll('.sightings')
-            .data(sightings)
+            .data(sightings[year])
             .enter().append('circle')
-            .attr('r', 1)
+            .attr('fill', black)
+            .attr('class', function(d) { return "point " + d.shape })
+            .attr('data-type', function(d) { return d.shape })      
+            .attr('data-city', function(d) { return d.city })      
+            .attr('data-country', function(d) { return d.country })      
+            .attr('data-duration', function(d) { return d.duration_h_m })      
+            .attr('data-datetime', function(d) { return d.datetime })      
+            .attr('r', 1.5)
             .attr('cx', (c) => {
               var coords = projection([c.longitude, c.latitude])
               return coords[0]
@@ -124,34 +316,9 @@
               var coords = projection([c.longitude, c.latitude])
               return coords[1]
             })
-            .on("mouseover", hoverPoint)
+            .on("click", clickPoint)
             .on("mouseout", leavePoint);
-
-        }
-
-        function hoverPoint(d, i) {
-          // Use D3 to select element, change color and size
-          d3.select(this).attr({
-            fill: "orange",
-            r: 1 * 2
-          })
-
-          let info = $('#ufoInfo')
-          info.empty()
-          info.append(`
-            <p>Type: ${d.shape}</p>
-            <p>City: ${d.city}</p>
-            <p>Country: ${d.country}</p>
-            <p>Duration: ${d.duration_h_m}</p>
-            <p>Date and Time: ${d.datetime}</p>
-            <p>Comments: ${d.comments}</p>
-          `)
-          
-        }
-
-        function leavePoint(d, i) {
-          
-        }
+          }
       })();
     </script>
   </body>
