@@ -99,31 +99,36 @@
     <div id="map"></div>
     <div id="menu">
       <div id="ufoInfo">
+        <label for="">
+          Show by Year: 
+            <span id="type"></span>
+            <input type="checkbox" name="byyear" class="checkbox" id="check-by-year" checked>
+        </label>
         <p>Show all with same:</p>
         <label for="">
           Type: 
             <span id="type"></span>
-            <input type="checkbox" name="type" class="checkbox" id="check-type">
+            <input type="checkbox" name="type" class="ufoInfoCheck" id="check-type">
         </label>
         <label for="">
           City: 
             <span id="city"></span>
-            <input type="checkbox" name="city" class="checkbox" id="check-city">
+            <input type="checkbox" name="city" class="ufoInfoCheck" id="check-city">
         </label>
         <label for="">
           Country:  
             <span id="country"></span>
-            <input type="checkbox" name="country" class="checkbox" id="check-country">
+            <input type="checkbox" name="country" class="ufoInfoCheck" id="check-country">
         </label>
         <label for="">
           Duration:  
             <span id="duration"></span>
-            <input type="checkbox" name="duration" class="checkbox" id="check-duration">
+            <input type="checkbox" name="duration" class="ufoInfoCheck" id="check-duration">
         </label>
         <label for="">
           Date and Time:  
             <span id="dateTime"></span>
-            <input type="checkbox" name="dateTime" class="checkbox" id="check-dateTime">
+            <input type="checkbox" name="dateTime" class="ufoInfoCheck" id="check-dateTime">
         </label>
         <label for="">
           Comments:  
@@ -181,7 +186,7 @@
         
         let loadUFOS = d3.csv('ufos.csv')
         
-        d3.selectAll(".checkbox").on("change", updateFilter)
+        d3.selectAll(".ufoInfoCheck").on("change", updateFilter)
         
         Promise.all([loadMap, loadUFOS]).then(function(values) {
           ready(values[0], values[1])
@@ -208,13 +213,21 @@
           var countries = topojson.feature(mapData, mapData.objects.countries1).features
           var sightings = ufoData
           let info = $('#ufoInfo')
+          let checkByYear = document.querySelector('#check-by-year')
+          let showByYear = true;
           let minDate = moment(sightings[0].datetime).year()
           let maxDate = moment(sightings[sightings.length-1].datetime).year()
           let sightingsByYear = sightings.groupByDate()
 
           yearSlider.setAttribute('min', minDate)
           yearSlider.setAttribute('max', maxDate)
-          yearSlider.addEventListener('input', function(e) {yearChange(e.target.value, sightingsByYear)})
+          yearSlider.addEventListener('change', function(e) { yearChange(e.target.value, sightingsByYear, showByYear) })
+          checkByYear.addEventListener('change', function(e) { 
+            // console.log(yearSlider.value)
+            showByYear = !showByYear 
+            // console.log(showByYear)
+            yearChange(e.target.value, sightingsByYear, showByYear)
+          })
 
           svg.selectAll('.country')
             .data(countries)
@@ -222,27 +235,28 @@
             .attr('class', 'country')
             .attr('d', path)
 
-          // svg.selectAll('.sightings')
-          //   .data(sightings)
-          //   .enter().append('circle')
-          //   .attr('fill', black)
-          //   .attr('class', function(d) { return "point " + d.shape })
-          //   .attr('data-type', function(d) { return d.shape })      
-          //   .attr('data-city', function(d) { return d.city })      
-          //   .attr('data-country', function(d) { return d.country })      
-          //   .attr('data-duration', function(d) { return d.duration_h_m })      
-          //   .attr('data-datetime', function(d) { return d.datetime })      
-          //   .attr('r', 1.5)
-          //   .attr('cx', (c) => {
-          //     var coords = projection([c.longitude, c.latitude])
-          //     return coords[0]
-          //   })
-          //   .attr('cy', (c) => {
-          //     var coords = projection([c.longitude, c.latitude])
-          //     return coords[1]
-          //   })
-          //   .on("click", clickPoint)
-          //   .on("mouseout", leavePoint);
+          svg.selectAll('.sightings')
+            .data(sightings)
+            .enter().append('circle')
+            .attr('fill', black)
+            .attr('class', function(d) { return "point " + d.shape })
+            .attr('data-type', function(d) { return d.shape })      
+            .attr('data-city', function(d) { return d.city })      
+            .attr('data-country', function(d) { return d.country })      
+            .attr('data-duration', function(d) { return d.duration_h_m })      
+            .attr('data-datetime', function(d) { return d.datetime }) 
+            .attr('data-date', function(d) { return moment(d.datetime).year() })     
+            .attr('r', 1.5)
+            .attr('cx', (c) => {
+              var coords = projection([c.longitude, c.latitude])
+              return coords[0]
+            })
+            .attr('cy', (c) => {
+              var coords = projection([c.longitude, c.latitude])
+              return coords[1]
+            })
+            .on("click", clickPoint)
+            .on("mouseout", leavePoint);
         }
 
         function clickPoint(d, i) {
@@ -295,30 +309,82 @@
           currentPoint.setAttribute('fill', orange)
         }
 
-        function yearChange (year, sightings) {
-          console.log(year)
-          svg.selectAll('.sightings')
-            .data(sightings[year])
-            .enter().append('circle')
-            .attr('fill', black)
-            .attr('class', function(d) { return "point " + d.shape })
-            .attr('data-type', function(d) { return d.shape })      
-            .attr('data-city', function(d) { return d.city })      
-            .attr('data-country', function(d) { return d.country })      
-            .attr('data-duration', function(d) { return d.duration_h_m })      
-            .attr('data-datetime', function(d) { return d.datetime })      
-            .attr('r', 1.5)
-            .attr('cx', (c) => {
-              var coords = projection([c.longitude, c.latitude])
-              return coords[0]
-            })
-            .attr('cy', (c) => {
-              var coords = projection([c.longitude, c.latitude])
-              return coords[1]
-            })
-            .on("click", clickPoint)
-            .on("mouseout", leavePoint);
+        function yearChange (year, sightings, showByYear) {
+          svg.selectAll('.point').remove()
+          
+          if (showByYear == true) {
+            if (sightings[year]) {
+              console.log(sightings[year].length)
+              svg.selectAll('.sightings')
+                .data(sightings[year])
+                .enter().append('circle')
+                .attr('fill', black)
+                .attr('class', function(d) { return "point " + d.shape })
+                .attr('data-type', function(d) { return d.shape })      
+                .attr('data-city', function(d) { return d.city })      
+                .attr('data-country', function(d) { return d.country })      
+                .attr('data-duration', function(d) { return d.duration_h_m })      
+                .attr('data-datetime', function(d) { return d.datetime })      
+                .attr('r', 1.5)
+                .attr('cx', (c) => {
+                  var coords = projection([c.longitude, c.latitude])
+                  return coords[0]
+                })
+                .attr('cy', (c) => {
+                  var coords = projection([c.longitude, c.latitude])
+                  return coords[1]
+                })
+                .on("click", clickPoint)
+                .on("mouseout", leavePoint);
+            }
+          } else {
+            svg.selectAll('.sightings')
+              .data(sightings)
+              .enter().append('circle')
+              .attr('fill', black)
+              .attr('class', function(d) { return "point " + d.shape })
+              .attr('data-type', function(d) { return d.shape })      
+              .attr('data-city', function(d) { return d.city })      
+              .attr('data-country', function(d) { return d.country })      
+              .attr('data-duration', function(d) { return d.duration_h_m })      
+              .attr('data-datetime', function(d) { return d.datetime })      
+              .attr('r', 1.5)
+              .attr('cx', (c) => {
+                var coords = projection([c.longitude, c.latitude])
+                return coords[0]
+              })
+              .attr('cy', (c) => {
+                var coords = projection([c.longitude, c.latitude])
+                return coords[1]
+              })
+              .on("click", clickPoint)
+              .on("mouseout", leavePoint);
           }
+
+          // if (sightings[year]) {
+          //   svg.selectAll('.sightings')
+          //     .data(sightings[year])
+          //     .enter().append('circle')
+          //     .attr('fill', black)
+          //     .attr('class', function(d) { return "point " + d.shape })
+          //     .attr('data-type', function(d) { return d.shape })      
+          //     .attr('data-city', function(d) { return d.city })      
+          //     .attr('data-country', function(d) { return d.country })      
+          //     .attr('data-duration', function(d) { return d.duration_h_m })      
+          //     .attr('data-datetime', function(d) { return d.datetime })      
+          //     .attr('r', 1.5)
+          //     .attr('cx', (c) => {
+          //       var coords = projection([c.longitude, c.latitude])
+          //       return coords[0]
+          //     })
+          //     .attr('cy', (c) => {
+          //       var coords = projection([c.longitude, c.latitude])
+          //       return coords[1]
+          //     })
+          //     .on("click", clickPoint)
+          //     .on("mouseout", leavePoint);
+          // }
+        }
       })();
     </script>
   </body>
