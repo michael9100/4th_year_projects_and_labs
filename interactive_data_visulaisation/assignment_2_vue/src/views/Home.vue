@@ -17,6 +17,11 @@ export default {
   data() {
     return {
       map: {
+        svg: {},
+        canvas: {},
+        context: {},
+        geoPath: {},
+        projection: {},
         margin: {
           top: 0,
           left: 0,
@@ -24,8 +29,12 @@ export default {
           bottom: 0,
         },
         countries: {},
+        // width: window.innerWidth,
+        // height: window.innerHeight,
         width: window.innerWidth,
         height: window.innerHeight,
+        bbWidth: document.body.getBoundingClientRect().width,
+        bbHeight: document.body.getBoundingClientRect().height,
       },
       sightings: {},
       colors: {
@@ -36,71 +45,103 @@ export default {
       },
     }
   },
-  created() {
+  mounted() {
+    this.sightings = ufoData
     this.initD3()
   },
   methods: {
     initD3() {
-      this.countries = topojson.feature(mapData, mapData.objects.countries1).features
-      this.sightings = ufoData
+      this.drawMap()
+      this.drawCanvas()
+    },
 
-      let svg = d3.select('#map')
+    drawMap() {
+      this.countries = topojson.feature(mapData, mapData.objects.countries1).features
+
+      this.map.svg = d3.select('#map')
         .append('svg')
-        .attr("width", "100%")
-        .attr("height", "100%")
-        .call(d3.zoom().on("zoom", function () {
-          svg.attr("transform", d3.event.transform)
-          zoomSightings()
+        .attr("width", this.map.width)
+        .attr("height", this.map.height)
+        .call(d3.zoom().on("zoom", () => {
+          this.map.svg.attr("transform", d3.event.transform)
         }))
         .append('g')
         .attr('transform', 'translate(' + this.map.margin.left + ',' + this.map.margin.top + ')')
 
-      let projection = d3.geoMercator()
+      this.map.projection = d3.geoMercator()
         .translate([this.map.width / 2, this.map.height / 2])
         .scale(300)
         
-      var path = d3.geoPath().projection(projection)
+      var path = d3.geoPath().projection(this.map.projection)
 
-
-      svg.selectAll('.country')
+      this.map.svg.selectAll('.country')
         .data(this.countries)
         .enter().append('path')
         .attr('class', 'country')
+        .attr('fill', '#40883e')
+        .attr('stroke', '#e7e5d2')
         .attr('d', path)
 
-      svg.selectAll('.sightings')
-        .data(this.sightings)
-        .enter().append('circle')
-        .attr('fill', this.colors.black)
-        .attr('class', function(d) { return "point " + d.shape })
-        .attr('data-type', function(d) { return d.shape })      
-        .attr('data-city', function(d) { return d.city })      
-        .attr('data-country', function(d) { return d.country })      
-        .attr('data-duration', function(d) { return d.duration_h_m })      
-        .attr('data-datetime', function(d) { return d.datetime }) 
-        .attr('data-date', function(d) { return moment(d.datetime).year() })     
-        .attr('r', 1.5)
-        .attr('cx', (c) => {
-          var coords = projection([c.longitude, c.latitude])
-          return coords[0]
-        })
-        .attr('cy', (c) => {
-          var coords = projection([c.longitude, c.latitude])
-          return coords[1]
-        })
-        // .on("click", clickPoint)
-        // .on("mouseout", leavePoint);
+    },
 
-      console.log(svg)
-      
+    drawCanvas() {
+      console.log('Drawing Sightings')
+      this.map.canvas = d3.select('#map')
+        .append('canvas')
+        .attr("id", 'pointsCanvas')
+        .attr("width", this.map.bbWidth)
+        .attr("height", this.map.bbHeight)
+        .attr("style", `
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        `)
+      this.map.canvas.node().width = this.map.bbWidth
+      this.map.canvas.node().height = this.map.bbHeight
+      this.map.context = this.map.canvas.node().getContext('2d')
+
+      this.drawPoints()
+    },
+   
+    drawPoints() {
+      this.map.context.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight )
+      this.map.context.fillStyle = '#3C3C3C'
+      this.map.context.strokeStyle = '#ffffff'
+
+      // this.map.context.beginPath()
+      // this.map.context.arc(10, 10, 4, 0, Math.PI*2, false)
+      // this.map.context.fill()
+      // this.map.context.stroke()
+
+      let d
+      var coords 
+      for (let i = 0; i < this.sightings.length; i++) {
+        d = this.sightings[i]
+        coords = this.map.projection([d.longitude, d.latitude])
+        this.map.context.beginPath()
+        this.map.context.arc(coords[0], coords[1], 3, 0, Math.PI*2)
+        this.map.context.fill()
+        this.map.context.stroke()
+      }
     }
   }
+
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 #map {
-  height: 100vh;
   width: 100vw;
+  height: 100vh;
+  background-color: #aacfff;
+  background-color: transparent;
+  position: relative;
+}
+.country {
+  fill: #40883e;
+  stroke: #e7e5d2;
+  stroke-width: .5;
 }
 </style>
