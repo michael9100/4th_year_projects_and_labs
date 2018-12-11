@@ -116,6 +116,11 @@ export default {
       this.map.context.strokeStyle = '#ffffff'
 
       this.map.canvas.on('mousemove', () => {
+        // =======================================================
+        // Need a way to detect the hover event.
+        // Possibly QuadTree
+        // https://bl.ocks.org/veltman/1b43f61887e89c371f1c8c73341540a3
+        // =======================================================
         let xy = [event.clientX, event.clientY]
         this.point.highlight.attr('style', `display: block`)
       })
@@ -126,7 +131,6 @@ export default {
     drawPoints(radius = 1) {
       this.map.context.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight )
 
-
       let d
       var coords
       for (let i = 0; i < this.sightings.length; i++) {
@@ -135,12 +139,11 @@ export default {
         this.map.context.beginPath()
         this.map.context.arc(coords[0], coords[1], radius, 0, Math.PI*2)
         this.map.context.fill()
-        // this.map.context.stroke()
       }
     },
 
     onZoom() {
-      var transform = d3.event.transform;
+      var transform = d3.event.transform
 
       // Check how far the zoom is and make an appropriate radius
       let zoomLevel = 1
