@@ -120,7 +120,7 @@ export default {
             right: 0;
             bottom: 0;
           `)
-          .call(d3.zoom().on("zoom", () => {
+          .call(d3.zoom().scaleExtent([1, 25]).on("zoom", () => {
             this.map.svg.attr("transform", d3.event.transform)
             this.onZoom()
           }))
@@ -156,8 +156,6 @@ export default {
 
         if (selected) {
           that.points.highlightedPoints.push(selected)
-          // WHY YOU NO WORK
-          that.redrawPoints()
         }
       })
 
@@ -172,33 +170,25 @@ export default {
 
       let d
       var coords
+      let visiblePoints = []
       for (let i = 0; i < this.sightings.length; i++) {
         //give the points id's
         this.sightings[i].id = i
         d = this.sightings[i]
 
-        let found = false
-        for (let j = 0; j < this.points.highlightedPoints.length; j++) {
-          if (d.id == this.points.highlightedPoints[j].id) {
-            found = true
-            break
-          }
-        }
+        coords = this.map.projection([d.longitude, d.latitude])
 
-        if (found == true) {
-          this.map.context.fillStyle = 'orange'
+        if (this.isInVisibleArea(coords[0], coords[1], 100)) {
+          visiblePoints.push(d)
         }
-        else {
-          this.map.context.fillStyle = '#303030'
-        }
-
+        
         // set up the color mapping of points
         let color = this.getColor(i * 1000 + 1)
+
+        // Draw Points
         this.map.colors[color] = d
         this.map.hiddenContext.fillStyle = 'rgb( ' + color + ' )'
 
-        // Draw Points
-        coords = this.map.projection([d.longitude, d.latitude])
         this.map.context.beginPath()
         this.map.hiddenContext.beginPath()
 
@@ -208,88 +198,13 @@ export default {
         this.map.context.fill()
         this.map.hiddenContext.fill()
       }
-    },
-
-    redrawPoints() {
-      console.log(this.map.transform.k)
-      this.map.context.fillStyle = '#3C3C3C'
-
-      // Check how far the zoom is and make an appropriate radius
-      this.points.radius = 1
-      // abstracted this val to a var as it was calculated 3 times
-      let k = this.map.transform.k / 7
-      if (k > 1 ) {
-        if (1 / (k) <= 0.03) {
-          this.points.radius = 0.03
-        } else {
-          this.points.radius = 1 / k
-        }
-      }
-
-      this.map.hiddenContext.save()
-      this.map.context.save()
-      
-      this.map.hiddenContext.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight)
-      this.map.context.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight)
-      
-      this.map.hiddenContext.translate(this.map.transform.x, this.map.transform.y)
-      this.map.context.translate(this.map.transform.x, this.map.transform.y)
-      
-      this.map.hiddenContext.scale(this.map.transform.k, this.map.transform.k)
-      this.map.context.scale(this.map.transform.k, this.map.transform.k)
-      
-      this.map.context.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight )
-      this.map.hiddenContext.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight )
-
-      this.map.colors = {}
-
-      let d
-      var coords
-      for (let i = 0; i < this.sightings.length; i++) {
-        //give the points id's
-        this.sightings[i].id = i
-        d = this.sightings[i]
-
-        let found = false
-        for (let j = 0; j < this.points.highlightedPoints.length; j++) {
-          if (d.id == this.points.highlightedPoints[j].id) {
-            found = true
-            break
-          }
-        }
-
-        if (found == true) {
-          this.map.context.fillStyle = 'orange'
-        }
-        else {
-          this.map.context.fillStyle = '#303030'
-        }
-
-        // set up the color mapping of points
-        let color = this.getColor(i * 1000 + 1)
-        this.map.colors[color] = d
-        this.map.hiddenContext.fillStyle = 'rgb( ' + color + ' )'
-
-        // Draw Points
-        coords = this.map.projection([d.longitude, d.latitude])
-        this.map.context.beginPath()
-        this.map.hiddenContext.beginPath()
-
-        this.map.context.arc(coords[0], coords[1], this.points.radius, 0, Math.PI*2)
-        this.map.hiddenContext.arc(coords[0], coords[1], this.points.radius, 0, Math.PI*2)
-                
-        this.map.context.fill()
-        this.map.hiddenContext.fill()
-      
-        this.map.hiddenContext.restore()
-        this.map.context.restore()
-      }
+      console.log(visiblePoints)
+      console.log(this.getVisibleArea())
     },
 
     onZoom() {
-      this.map.context.fillStyle = '#3C3C3C'
-
       this.map.transform = d3.event.transform
+      this.map.context.fillStyle = '#3C3C3C'
 
       // Check how far the zoom is and make an appropriate radius
       this.points.radius = 1
@@ -324,7 +239,38 @@ export default {
 
     getColor(i) {
       return (i % 256) + "," + (Math.floor(i / 256) % 256) + "," + (Math.floor(i / 65536) % 256);
-    }
+    },
+
+    getVisibleArea() {
+      // https://stackoverflow.com/questions/42695480/d3v4-zoom-coordinates-of-visible-area
+      let l = this.map.transform.invert([0, 0])
+      let r = this.map.transform.invert([this.map.bbWidth, this.map.bbHeight]);
+
+      return [
+        {
+          'x': Math.trunc(l[0]), 
+          'y': Math.trunc(l[1])
+        },
+        {
+          'x': Math.trunc(r[0]), 
+          'y': Math.trunc(r[1])
+        }
+      ]
+    },
+
+    isInVisibleArea(x, y, margin) {
+      let visible = this.getVisibleArea()
+      if (
+          x >= visible[0].x - margin &&
+          x <= visible[1].x + margin &&
+          y >= visible[0].x - margin &&
+          y <= visible[1].x + margin
+      ) {
+        return true
+      }
+
+      return false
+      }
   }
 
 }

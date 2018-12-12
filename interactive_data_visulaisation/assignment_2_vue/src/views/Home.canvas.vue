@@ -25,7 +25,6 @@ export default {
         colors: {},
         geoPath: {},
         projection: {},
-        transform: {},
         margin: {
           top: 0,
           left: 0,
@@ -33,6 +32,8 @@ export default {
           bottom: 0,
         },
         countries: {},
+        // width: window.innerWidth,
+        // height: window.innerHeight,
         width: window.innerWidth,
         height: window.innerHeight,
         bbWidth: document.body.getBoundingClientRect().width,
@@ -130,8 +131,8 @@ export default {
      
      
       // Hidden Canvas
-      this.map.hiddenCanvas = d3.select(document.createElement('canvas'))
-        // .append('canvas')
+      this.map.hiddenCanvas = d3.select('#map')
+        .append('canvas')
         .attr("id", 'hiddenCanvas')
         .attr("width", this.map.bbWidth)
         .attr("height", this.map.bbHeight)
@@ -156,8 +157,8 @@ export default {
 
         if (selected) {
           that.points.highlightedPoints.push(selected)
-          // WHY YOU NO WORK
-          that.redrawPoints()
+          // something about calling this fucks up the zoom.
+          // that.drawPoints()
         }
       })
 
@@ -181,7 +182,6 @@ export default {
         for (let j = 0; j < this.points.highlightedPoints.length; j++) {
           if (d.id == this.points.highlightedPoints[j].id) {
             found = true
-            break
           }
         }
 
@@ -210,91 +210,41 @@ export default {
       }
     },
 
-    redrawPoints() {
-      console.log(this.map.transform.k)
-      this.map.context.fillStyle = '#3C3C3C'
+    drawHighlightPoints() {
+      // this.map.context.fillStyle = 'orange'
 
-      // Check how far the zoom is and make an appropriate radius
-      this.points.radius = 1
-      // abstracted this val to a var as it was calculated 3 times
-      let k = this.map.transform.k / 7
-      if (k > 1 ) {
-        if (1 / (k) <= 0.03) {
-          this.points.radius = 0.03
-        } else {
-          this.points.radius = 1 / k
-        }
-      }
+      // var transform = d3.event.transform
 
-      this.map.hiddenContext.save()
-      this.map.context.save()
-      
-      this.map.hiddenContext.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight)
-      this.map.context.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight)
-      
-      this.map.hiddenContext.translate(this.map.transform.x, this.map.transform.y)
-      this.map.context.translate(this.map.transform.x, this.map.transform.y)
-      
-      this.map.hiddenContext.scale(this.map.transform.k, this.map.transform.k)
-      this.map.context.scale(this.map.transform.k, this.map.transform.k)
-      
-      this.map.context.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight )
-      this.map.hiddenContext.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight )
+      // console.log(transform)
 
-      this.map.colors = {}
+      // this.map.context.save()
+      // this.map.context.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight)
+      // this.map.context.translate(transform.x, transform.y)
+      // this.map.context.scale(transform.k, transform.k)
 
-      let d
-      var coords
-      for (let i = 0; i < this.sightings.length; i++) {
-        //give the points id's
-        this.sightings[i].id = i
-        d = this.sightings[i]
+      // let d
+      // var coords
+      // for (let i = 0; i < this.points.highlightedPoints.length; i++) {
+      //   d = this.points.highlightedPoints[i]
 
-        let found = false
-        for (let j = 0; j < this.points.highlightedPoints.length; j++) {
-          if (d.id == this.points.highlightedPoints[j].id) {
-            found = true
-            break
-          }
-        }
-
-        if (found == true) {
-          this.map.context.fillStyle = 'orange'
-        }
-        else {
-          this.map.context.fillStyle = '#303030'
-        }
-
-        // set up the color mapping of points
-        let color = this.getColor(i * 1000 + 1)
-        this.map.colors[color] = d
-        this.map.hiddenContext.fillStyle = 'rgb( ' + color + ' )'
-
-        // Draw Points
-        coords = this.map.projection([d.longitude, d.latitude])
-        this.map.context.beginPath()
-        this.map.hiddenContext.beginPath()
-
-        this.map.context.arc(coords[0], coords[1], this.points.radius, 0, Math.PI*2)
-        this.map.hiddenContext.arc(coords[0], coords[1], this.points.radius, 0, Math.PI*2)
-                
-        this.map.context.fill()
-        this.map.hiddenContext.fill()
-      
-        this.map.hiddenContext.restore()
-        this.map.context.restore()
-      }
+      //   // Draw Points
+      //   coords = this.map.projection([d.longitude, d.latitude])
+      //   this.map.context.beginPath()
+      //   this.map.context.arc(coords[0], coords[1], this.points.radius, 0, Math.PI*2)
+      //   this.map.context.fill()
+      // }
+      // this.map.context.restore()
     },
 
     onZoom() {
       this.map.context.fillStyle = '#3C3C3C'
 
-      this.map.transform = d3.event.transform
+      var transform = d3.event.transform
 
       // Check how far the zoom is and make an appropriate radius
       this.points.radius = 1
       // abstracted this val to a var as it was calculated 3 times
-      let k = this.map.transform.k / 7
+      let k = transform.k / 7
       if (k > 1 ) {
         if (1 / (k) <= 0.03) {
           this.points.radius = 0.03
@@ -309,13 +259,14 @@ export default {
       this.map.hiddenContext.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight)
       this.map.context.clearRect(0, 0, this.map.bbWidth, this.map.bbHeight)
       
-      this.map.hiddenContext.translate(this.map.transform.x, this.map.transform.y)
-      this.map.context.translate(this.map.transform.x, this.map.transform.y)
+      this.map.hiddenContext.translate(transform.x, transform.y)
+      this.map.context.translate(transform.x, transform.y)
       
-      this.map.hiddenContext.scale(this.map.transform.k, this.map.transform.k)
-      this.map.context.scale(this.map.transform.k, this.map.transform.k)
+      this.map.hiddenContext.scale(transform.k, transform.k)
+      this.map.context.scale(transform.k, transform.k)
       
       this.drawPoints()
+      this.drawHighlightPoints()
 
       this.map.hiddenContext.restore()
       this.map.context.restore()
