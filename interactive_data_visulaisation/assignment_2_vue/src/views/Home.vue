@@ -143,6 +143,8 @@ export default {
       this.map.context.fillStyle = '#3C3C3C'
       this.map.context.strokeStyle = '#ffffff'
 
+      this.drawPoints()
+
       // Need to reference this as that as the this 
       // scope is needed for d3.move(this)
       let that = this
@@ -151,19 +153,14 @@ export default {
       
         // Get pixel from offscreen canvas
         let color = that.map.hiddenContext.getImageData(xy[0], xy[1], 1, 1).data
-
-        // document.querySelector('#map').appendChild(color)
         let selected = that.map.colors[color.slice(0,3).toString()]
-
         if (selected) {
+          that.points.highlightedPoints.length = 0
           that.points.highlightedPoints.push(selected)
-          // WHY YOU NO WORK
-          // that.redrawPoints()
+          that.onHoverPoint()
           that.onZoom()
         }
       })
-
-      this.drawPoints()
     },
 
     drawPoints() {
@@ -178,21 +175,6 @@ export default {
         //give the points id's
         this.sightings[i].id = i
         d = this.sightings[i]
-
-        let found = false
-        for (let j = 0; j < this.points.highlightedPoints.length; j++) {
-          if (d.id == this.points.highlightedPoints[j].id) {
-            found = true
-            break
-          }
-        }
-
-        if (found == true) {
-          this.map.context.fillStyle = 'orange'
-        }
-        else {
-          this.map.context.fillStyle = '#303030'
-        }
 
         // set up the color mapping of points
         let color = this.getColor(i * 1000 + 1)
@@ -209,6 +191,34 @@ export default {
                 
         this.map.context.fill()
         this.map.hiddenContext.fill()
+      }
+
+      for (let i = 0; i < this.points.highlightedPoints.length; i++) {
+        d = this.points.highlightedPoints[i]
+        
+        this.map.context.fillStyle = 'orange'
+
+        // Draw Points
+        coords = this.map.projection([d.longitude, d.latitude])
+        this.map.context.beginPath()
+
+        this.map.context.arc(coords[0], coords[1], this.points.radius, 0, Math.PI*2)
+                
+        this.map.context.fill()
+      }
+    },
+
+    drawHighlightedPoints() {
+      let d
+      var coords
+      for (let i = 0; i < this.points.highlightedPoints.length; i++) {
+        d = this.points.highlightedPoints[i]
+        this.map.context.fillStyle = 'orange'
+        // Draw Points
+        coords = this.map.projection([d.longitude, d.latitude])
+        this.map.context.beginPath()
+        this.map.context.arc(coords[0], coords[1], this.points.radius, 0, Math.PI*2)
+        this.map.context.fill()
       }
     },
 
@@ -243,7 +253,29 @@ export default {
 
       this.map.hiddenContext.restore()
       this.map.context.restore()
+    },
 
+    onHoverPoint() {
+      this.map.context.fillStyle = '#3C3C3C'
+
+      // Check how far the zoom is and make an appropriate radius
+      this.points.radius = 1
+      // abstracted this val to a var as it was calculated 3 times
+      let k = this.map.transform.k / 7
+      if (k > 1 ) {
+        if (1 / (k) <= 0.03) {
+          this.points.radius = 0.03
+        } else {
+          this.points.radius = 1 / k
+        }
+      }
+
+      this.map.context.save()
+      this.map.context.translate(this.map.transform.x, this.map.transform.y)      
+      this.map.context.scale(this.map.transform.k, this.map.transform.k)
+      
+      this.drawHighlightedPoints()
+      this.map.context.restore()
     },
 
     getColor(i) {
